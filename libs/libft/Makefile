@@ -6,7 +6,7 @@
 #    By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/03 14:25:27 by olcherno          #+#    #+#              #
-#    Updated: 2025/03/05 19:13:42 by olcherno         ###   ########.fr        #
+#    Updated: 2025/07/28 19:47:21 by olcherno         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,16 +27,16 @@ OBJS = $(SOURCES:.c=.o)
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	ar -r $(NAME) $(OBJS)
+	@ar -r $(NAME) $(OBJS)
 
 %.o: %.c
-	   cc $(FLAGS) -c $< -o $@
+	@cc $(FLAGS) -c $< -o $@
 
 clean: 
-	rm -f $(OBJS)
+	@rm -f $(OBJS)
 
 fclean: clean
-	rm -f $(NAME)
+	@rm -f $(NAME)
 
 re: fclean all
 

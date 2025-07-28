@@ -6,7 +6,7 @@
 /*   By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 16:11:33 by dt                #+#    #+#             */
-/*   Updated: 2025/07/27 17:15:34 by olcherno         ###   ########.fr       */
+/*   Updated: 2025/07/28 19:51:14 by olcherno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ t_input	*make_word(t_input *words, char *input)
 	if (words->word == NULL)
 	{
 		//func not finished
-		ft_clean(words, input);
+		//ft_clean(words, input);
 		exit(2);
 	}
 	while (i <= (wrd_len) && input[i])
