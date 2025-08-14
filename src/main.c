@@ -28,18 +28,17 @@ void	ft_clean(t_input *words, char *input)
 // int	main(int argc, char **argv, char **envp)
 int	main(int argc, char **argv, char **envp)
 {
-	char *cmd[] = {"echo", "hello", NULL};
+
 	t_input	*words;
 	char	*input;
 	t_env	*my_env;
+	char	*inputs[] = {"ls", "-l", NULL};
+
+	char	*cmd[] = {"echo", "hello", NULL};
 
 	my_env = init_env(envp);
-	
 	// function to copy envp to stack
-	char *inputs[] = {"ls", "-l", NULL};
 	execve("/bin/echo", cmd, envp);
-	
-
 	words = malloc(sizeof(*words));
 	if (words == NULL)
 		exit(3);
