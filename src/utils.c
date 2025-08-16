@@ -6,11 +6,22 @@
 /*   By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 16:11:33 by dt                #+#    #+#             */
-/*   Updated: 2025/07/27 17:15:48 by olcherno         ###   ########.fr       */
+/*   Updated: 2025/08/16 20:53:44 by olcherno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+void ft_clean(t_input *words, char *input)
+{
+	if (input)
+		free(input);
+// clean stack func needed 
+	if (words->word)
+		free(words->word);
+	if (words)
+		free(words);
+}
 
 size_t	ft_strlen(const char *s)
 {
@@ -26,12 +37,3 @@ size_t	ft_strlen(const char *s)
 	}
 	return (i);
 }
-
-// int main(int argc, char **argv)
-// {
-// 	const char *s;
-	
-// 	s = "MAMA";
-// 	printf("\n%d", (int)ft_strlen(s));
-// 	return 0;
-// }

@@ -6,82 +6,115 @@
 /*   By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 16:11:33 by dt                #+#    #+#             */
-/*   Updated: 2025/07/28 19:51:14 by olcherno         ###   ########.fr       */
+/*   Updated: 2025/08/16 21:41:28 by olcherno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-// adds word to the node 
-t_input	*make_word(t_input *words, char *input)
-{
-	size_t	wrd_len;
-	size_t	i;
+// // returns new node, parametrs: s-e-type,
+// t_input	*do_node(int start_end[], char *input)
+// {
+// 	int		len;
+// 	char	*res;
+// 	int		i;
+// 	t_input	*new_node;
+	
+// 	i = 0;
+// 	new_node = malloc(sizeof(t_input));
+// 	if (new_node == NULL)
+// 		return (NULL);
+// 	len = start_end[1] - start_end[0];
+// 	res = malloc(sizeof(char) * (len + 1));
+// 	if (res == NULL)
+// 	{
+// 		// probably should be added free(words) if (words != NULL)
+// 		free(new_node);
+// 		return (NULL);
+// 	}
+// 	while (i < len)
+// 	{
+// 		res[i] = *(input + i);
+// 		i++;
+// 	}
+// 	res[i] = '\0';
+// 	new_node->word = res;
+// 	new_node->next = NULL;
+// 	new_node->type = start_end[2];
+// 	return (new_node);
+// }
 
-	i = 0;
-	wrd_len = ft_strlen(input);
-	words->word = malloc((wrd_len + 1) * (sizeof(char)));
-	if (words->word == NULL)
-	{
-		//func not finished
-		//ft_clean(words, input);
-		exit(2);
-	}
-	while (i <= (wrd_len) && input[i])
-	{
-		words->word[i] = input[i];
-		i++;
-	}
-	words->word[i] = '\0';
-	words->next = NULL;
-	return (words);
-}
+// int	add_node(t_input **words, t_input *new_word, int tk_len)
+// {
+// 	t_input	*tmp;
 
-// "" all is a text within except $ that works 
-// ''  all is a text within including $
-// < >
-// >> <<
-//   |
-// $?
-// environment variables 
+// 	if (*words == NULL)
+// 	{
+// 		*words = new_word;
+// 		tk_len = calc_len(new_word);
+// 		return (tk_len);
+// 	}
+// 	tmp = *words;
+// 	while (tmp->next != NULL)
+// 		tmp = tmp->next;
+// 	tmp->next = new_word;
+// 	if (new_word->type == 0) // if first word
+// 		tk_len = calc_len(new_word);
+// 	else if (new_word->type == 1 || new_word->type == 9)
+// 		tk_len = calc_len(new_word); //+1 for skiped - / $
+// 	else if (new_word->type == 2 || new_word->type == 3)
+// 		tk_len = calc_len(new_word) + 2; //+2 for skiped '' / ""
+// 	else if (new_word->type == 4 || new_word->type == 5 || new_word->type == 6
+// 		|| new_word->type == 7 || new_word->type == 8)
+// 		tk_len = calc_len(new_word); // if | > >> << <
+// 	return (tk_len);
+// }
 
-void func(t_input *words, char *input)
-{
+// int	creat_tokenz(char *input, t_input **words, int tk_len)
+// {
+// 	int	type;
+// 	int	res[3];
+// 	int	len;
 
-}
+// 	// command == . / A-Z a-z
+// 	if ((*input >= 65 && *input <= 90) || (*input >= 97 && *input <= 122)
+// 		|| *input == 95 || *input == 46 || *input == 97)
+// 		return (add_node(words, do_node(tk_command(input, res), input), tk_len));
+// 	else if (*input == '-') // flag
+// 		return (add_node(words, do_node(tk_flag(input, res), input), tk_len));	
+// 	else if (*input == 39 || *input == 34) // quots
+// 		return (add_node(words, do_node(tk_quotes(input, res), input), tk_len));	
+// 	else if (*input == 124) // |
+// 	return (add_node(words, do_node(tk_pipe(input, res), input), tk_len));	
+// 	else if (*input == 36) // $ (environmental var)
+// 		return (add_node(words, do_node(tk_envp_v(input, res), input), tk_len));	
+// 	else if (*input == 62) // >> >
+// 		return (add_node(words, do_node(tk_out_appnd(input, res), input), tk_len));	
+// 	else if (*input == 60) // << <
+// 		return (add_node(words, do_node(tk_in_here(input, res), input), tk_len));
+// 	// else condition is needed
+// 	return (0); // <<=--
+// }
 
-void	tokenize(t_input *words, char *input)
-{
-	t_input	*tmp;
-	int		i;
-	bool	first_wrd;
+// t_input	*tokenize(t_input *words, char *input)
+// {
+// 	int	tk_len;
 
-	i = 0;
-	first_wrd = 1;
-	if (input == NULL)
-		return ;
-	while (*input != '\0')
-	{
-		if (*input != 32)
-		{
-			if (first_wrd)
-			{
-				tmp = make_word(words, input);
-				first_wrd = 0;
-			}
-			else
-			{
-				tmp->next = make_word(words, input);
-				tmp = tmp->next;
-			}
-			input += ft_strlen(input);
-		}
-		else
-			input++;
-	}
-	while (words->next != NULL)
-	{
-		printf("\nWord #%d: %s", i, words->word);
-		i++;
-	}
-}
+// 	tk_len = 0;
+// 	// printf("tk_len: %d", tk_len);
+// 	// printf("\nInput: %d", tk_len);
+// 	while (*input != '\0')
+// 	{
+// 		if (*input != 32 && *input != 9)
+// 		{
+// 			tk_len = creat_tokenz(input, &words, tk_len);
+// 			// printf("\n.tk_len: %d", tk_len);
+// 			input += tk_len;
+// 		}
+// 		else // if *input = 32 || *input = 9
+// 		{
+// 			input++;
+// 		}
+// 	}
+// 	return (words);
+// }
