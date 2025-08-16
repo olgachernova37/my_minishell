@@ -6,7 +6,7 @@
 /*   By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 21:59:13 by olcherno          #+#    #+#             */
-/*   Updated: 2025/08/16 23:15:13 by olcherno         ###   ########.fr       */
+/*   Updated: 2025/08/16 23:46:14 by olcherno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@ bool	is_command_buildin(char *input)
 
 void	which_buildin_command(char *input, t_env *my_env)
 {
-	// if (ft_strncmp(input, "echo", 4) == 0)
-	// 	echo_command_implementation(input);
+	if (ft_strncmp(input, "echo", 4) == 0)
+		echo_command_implementation(input);
 	// else if (ft_strncmp(input, "pwd", 3) == 0)
 	// 	pwd_command_implementation();
 	// else if (ft_strncmp(input, "export", 6) == 0)
@@ -50,8 +50,8 @@ void	which_buildin_command(char *input, t_env *my_env)
 	// 	cd_command_implementation(my_env);
 	// else if (ft_strncmp(input, "exit", 4) == 0)
 	// 	exit_command_implementation(my_env);
-	// else if (ft_strncmp(input, "env", 3) == 0)
-	// 	print_my_env(my_env);
+	else if (ft_strncmp(input, "env", 3) == 0)
+		print_my_env(my_env);
     ft_printf("which_buildin_command: %s\n", input);
 }
 

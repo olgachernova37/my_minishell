@@ -6,7 +6,7 @@
 /*   By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 16:30:53 by olcherno          #+#    #+#             */
-/*   Updated: 2025/08/16 22:51:15 by olcherno         ###   ########.fr       */
+/*   Updated: 2025/08/16 23:45:24 by olcherno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int	main(int argc, char **argv, char **envp)
 	words = malloc(sizeof(*words));
 	if (words == NULL)
 		exit(3);
-	print_my_env(my_env); // function to print env list
+	// print_my_env(my_env); // function to print env list
 	while (42)
 	{
 		input = readline("Minishell % ");
