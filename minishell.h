@@ -6,7 +6,7 @@
 /*   By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 16:31:21 by olcherno          #+#    #+#             */
-/*   Updated: 2025/08/16 23:02:12 by olcherno         ###   ########.fr       */
+/*   Updated: 2025/08/18 17:47:54 by olcherno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@
 # include <termios.h>
 # include <unistd.h>
 
+extern int exit_status;
+
 typedef enum{
     TOKEN_WORD, //0
     TOKEN_PIPE, //1
@@ -43,6 +45,7 @@ typedef struct s_input
 	token_type_t	type;
 	struct s_input	*next;
 	char			*word;
+	char 			**argv;
 }					t_input;
 
 typedef struct s_env
@@ -51,6 +54,8 @@ typedef struct s_env
 	char			*value;
 	struct s_env	*next;
 }					t_env;
+
+
 
 // parsing.c
 t_input				*make_word(t_input *words, char *input);
@@ -94,14 +99,17 @@ int					*tk_envp_v(char *input, int res[3]);
 size_t				ft_strlen(const char *s);
 
 // what_command.c
-bool				is_command_buildin(char *input);
-void				what_command(char *input, t_env *my_env);
-void 				echo_command_implementation(char *input);
-void 				pwd_command_implementation(void);
-void 				export_command_implementation(t_env *my_env);
-void 				unset_command_implementation(t_env *my_env);
-void 				cd_command_implementation(t_env *my_env);
-void 				exit_command_implementation(t_env *my_env);	
+bool				is_command_buildin(t_input *input);
+void				what_command(t_input *input, t_env *my_env);
+int				echo_command_implementation(t_input *input);
+void 				pwd_command_implementation(t_input *input);
+void 				export_command_implementation(t_input *input);
+void 				unset_command_implementation(t_input *input);
+void 				cd_command_implementation(t_input *input);
+void 				exit_command_implementation(t_env *my_env);
+
+t_input *initialize_command();
+
 
 
 #endif
