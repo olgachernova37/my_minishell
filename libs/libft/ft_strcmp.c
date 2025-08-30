@@ -1,24 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd_command_implementation.c                       :+:      :+:    :+:   */
+/*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/16 23:50:56 by olcherno          #+#    #+#             */
-/*   Updated: 2025/08/30 21:18:10 by olcherno         ###   ########.fr       */
+/*   Created: 2025/08/30 20:02:26 by olcherno          #+#    #+#             */
+/*   Updated: 2025/08/30 20:02:48 by olcherno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "libft.h"
 
-int pwd_command_implementation(t_input *input, t_env *env)
+int	ft_strcmp(const char *s1, const char *s2)
 {
-    char cwd[PATH_MAX];
-
-    if (getcwd(cwd, sizeof(cwd)) != NULL)
-        printf("%s\n", cwd);
-    else
-        perror("pwd");
-    return 0;
+    while (*s1 && (*s1 == *s2))
+    {
+        s1++;
+        s2++;
+    }
+    return ((unsigned char)*s1 - (unsigned char)*s2);
 }

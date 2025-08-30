@@ -6,7 +6,7 @@
 /*   By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 16:31:21 by olcherno          #+#    #+#             */
-/*   Updated: 2025/08/18 17:47:54 by olcherno         ###   ########.fr       */
+/*   Updated: 2025/08/30 21:30:16 by olcherno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,14 +102,22 @@ size_t				ft_strlen(const char *s);
 bool				is_command_buildin(t_input *input);
 void				what_command(t_input *input, t_env *my_env);
 int				echo_command_implementation(t_input *input);
-void 				pwd_command_implementation(t_input *input);
-void 				export_command_implementation(t_input *input);
-void 				unset_command_implementation(t_input *input);
-void 				cd_command_implementation(t_input *input);
+int 				pwd_command_implementation(t_input *input, t_env *my_env);
+int 				export_command_implementation(t_input *input);
+int 				unset_command_implementation(t_input *input);
+int 				cd_command_implementation(t_input *input, t_env *my_env);
 void 				exit_command_implementation(t_env *my_env);
 
+//testing help_file.c
 t_input *initialize_command();
 
+//cd
+int	only_cd(t_input *input, t_env *env);
+int standard_cd(t_input *input);
+int previous_dir(t_input *input, t_env *env);
+
+
+int other_commands_implementation(t_input *input, t_env *env);
 
 
 #endif

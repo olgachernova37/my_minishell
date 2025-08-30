@@ -75,3 +75,13 @@ Environment Variables
 - set USER environment variable.
 - Test echo "'$USER'" this should print 'USER_VALUE'
 - Test echo '"$USER"' this should print "$USER"
+
+CD
+
+
+cd (без аргументів)
+cd ~ (опціонально)
+cd -
+cd /tmp
+cd not_exist_dir
+cd arg1 arg2 (too many arguments)

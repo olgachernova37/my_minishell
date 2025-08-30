@@ -1,24 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd_command_implementation.c                       :+:      :+:    :+:   */
+/*   other_commands.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/16 23:50:56 by olcherno          #+#    #+#             */
-/*   Updated: 2025/08/30 21:18:10 by olcherno         ###   ########.fr       */
+/*   Created: 2025/08/30 21:27:45 by olcherno          #+#    #+#             */
+/*   Updated: 2025/08/30 21:42:37 by olcherno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int pwd_command_implementation(t_input *input, t_env *env)
+int other_commands_implementation(t_input *input, t_env *env)
 {
-    char cwd[PATH_MAX];
 
-    if (getcwd(cwd, sizeof(cwd)) != NULL)
-        printf("%s\n", cwd);
-    else
-        perror("pwd");
+	//    ;
+	//     perror("execve"); // Print error if execve fails
+    
+
+    execve(input->word, input->argv, envp);
+     printf("it`s only ls\n");
+    // if ( execve(input->word, input->argv, env) != 0)
+    //     return(1);
     return 0;
 }
