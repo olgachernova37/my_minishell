@@ -6,12 +6,12 @@
 #    By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/06 15:18:15 by olcherno          #+#    #+#              #
-#    Updated: 2025/08/31 15:24:03 by olcherno         ###   ########.fr        #
+#    Updated: 2025/09/03 18:04:06 by olcherno         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 
-CC = cc # cc 
+CC = cc -g # cc 
 # CFLAGS = -g -Wall -Wextra -Werror
 NAME = minishell
 SRCDIR = src
@@ -20,11 +20,11 @@ LIBFTDIR = libs/libft
 FTPRINTF_DIR = libs/libftprintf
 COMMAND_DIR = src/commands
 
-SRC_OP = main.c env_init.c tokenizer.c help_file.c tokenizer_utils.c  validate_input_2.c exit.c quotes.c  tokenizer_utils_2.c  utils.c validate_input.c what_command.c \
+
+SRC_OP = do_array.c main.c env_init.c tokenizer.c help_file.c tokenizer_utils.c tokenizer_utils_2.c utils.c validate_input.c validate_input_2.c exit.c what_command.c \
 
 SRC_DATA = buildin_commands/cd_command_implementation.c    buildin_commands/exit_command_implementation.c    buildin_commands/pwd_command_implementation.c \
-buildin_commands/echo_command_implementation.c  buildin_commands/export_command_implementation.c  buildin_commands/unset_command_implementation.c \
-buildin_commands/other_commands.c  envlist_to_array.c 
+buildin_commands/echo_command_implementation.c  buildin_commands/export_command_implementation.c  buildin_commands/unset_command_implementation.c
 
 SRC = $(SRC_OP) $(SRC_DATA)
 
@@ -33,7 +33,7 @@ SRCS = $(addprefix $(SRCDIR)/, $(SRC))
 
 # Rules of files
 $(NAME): $(OBJS) $(LIBFTDIR)/libft.a $(FTPRINTF_DIR)/libftprintf.a
-	$(CC) $(CFLAGS) $(OBJS) -L$(LIBFTDIR) -lft -L$(FTPRINTF_DIR) -lftprintf -lreadline -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) -L$(LIBFTDIR) -lft -L$(FTPRINTF_DIR) -lftprintf -lreadline -ltinfo -o $(NAME)
 
 # Create necessary directories for object files
 $(OBJDIR):

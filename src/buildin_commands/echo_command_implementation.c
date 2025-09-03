@@ -6,13 +6,13 @@
 /*   By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 23:26:59 by olcherno          #+#    #+#             */
-/*   Updated: 2025/08/30 19:56:03 by olcherno         ###   ########.fr       */
+/*   Updated: 2025/08/31 22:53:50 by olcherno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int echo_command_implementation(t_input *input)
+int echo_command_implementation(char **input)
 {
     int	i;
     int y;
@@ -21,16 +21,16 @@ int echo_command_implementation(t_input *input)
 	n_FLAG = 0;
 	i = 1;
     y = 1;
-	if (input->argv[i] && ft_strncmp(input->argv[1], "-n", 3) == 0)
+	if (input[i] && ft_strncmp(input[1], "-n", 3) == 0)
 	{
 		n_FLAG = 1;
         y = 2;
 	}
 
-    while (input->argv[y] != NULL)
+    while (input[y] != NULL)
     {
-        printf("%s", input->argv[y]);
-        if (input->argv[y + 1])
+        printf("%s", input[y]);
+        if (input[y + 1])
             printf(" ");
         y++;
     }

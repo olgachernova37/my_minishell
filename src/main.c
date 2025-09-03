@@ -6,34 +6,118 @@
 /*   By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 16:30:53 by olcherno          #+#    #+#             */
-/*   Updated: 2025/08/18 17:59:07 by olcherno         ###   ########.fr       */
+/*   Updated: 2025/09/01 23:01:51 by olcherno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-#include <string.h>
 
-// void	ft_clean(t_input *words, char *input)
-// {
-// 	if (input)
-// 		free(input);
-// 	// clean stack func needed
-// 	if (words->word)
-// 		free(words->word);
-// 	if (words)
-// 		free(words);
-// }
+// func for tests
+void	print_og_env(char **envp)
+{
+	int	i;
 
-// int	main(void)
+	i = 0;
+	if (envp == NULL)
+		return ;
+	while (envp[i])
+		printf("%s\n", envp[i++]);
+}
+
+// test main
+int	main(int argc, char **argv, char **envp)
+{
+	char	*input;
+	char	**array;
+	t_input	*words;
+	t_env	*env;
+	
+	t_env	*env_tmp;
+	t_input *tmp_wrds;
+	char 	**env_array;
+	int		i;
+	
+	env = env_init(envp);
+	////
+	// env_tmp = env;
+	// env_array = do_env_array(env, count_list_env(env));
+	// i = 0;
+	// printf("ENV LIST:\n");
+	// while(env_tmp != NULL)
+	// {
+	// 	printf("#%d %s=%s\n", i++, env_tmp->key, env_tmp->value);
+	// 	env_tmp = env_tmp->next;
+	// }
+	// i = 0;
+	// printf("\nENV ARRAY:\n");
+	// while(i < (count_list_env(env) + 1))
+	// {
+	// 	printf("#%d %s\n", i, env_array[i]);
+	// 	i++;
+	// }
+	////
+	read_history(".minishell_history");
+	while (42)
+	{
+		i = 0;
+		tmp_wrds = NULL;
+		array = NULL;
+		words = NULL;
+		input = readline("Minishell % ");
+		if (input == NULL)
+			break;
+		if (*input)
+        	add_history(input);
+		if (*input == '\0' || !validate_input(input))
+		{
+			free(input);
+			continue ;
+		}
+		words = tokenize(words, input);
+		tmp_wrds = words;
+		while (tmp_wrds != NULL)
+		{
+			i += 1;
+			printf("\n#%d. word: %s, type %d", i, tmp_wrds->word, tmp_wrds->type);
+			tmp_wrds = tmp_wrds->next;
+		}
+		printf("\n\n");
+		array = do_input_array(words, count_list_input(words));
+
+		
+		///
+		// i = 0;
+		// array = do_input_array(words, count_list_input(words));
+		// printf("\n\nLenght of the list: %d\n\n", count_list_input(words));
+		// while (array[i])
+		// 	printf("%s -> ", array[i++]);
+		// printf("%s\n", array[i]);
+		///
+		env_array = do_env_array(env, count_list_env(env));
+		what_command(array, env, env_array);
+
+		free(input);
+		free(words);
+	}
+	write_history(".minishell_history");
+	return (0);
+}
+
+// demo main
+// int	main(int argc, char **argv, char **envp)
 // {
 // 	t_input	*words;
+// 	t_env	*env;
 // 	char	*input;
-// 	int i;
+// 	char	**array;
+// 	char 	**env_array;
 
-// 	i = 0;
-// 	words = NULL;
+// 	env = env_init(envp);
+// 	env_array = do_env_array(env, count_list_env(env));
 // 	while (42)
 // 	{
+// 		array = NULL;
+// 		words = NULL;
 // 		input = readline("Minishell % ");
 // 		if (input == NULL)
 // 			break ;
@@ -43,60 +127,10 @@
 // 			continue ;
 // 		}
 // 		words = tokenize(words, input);
-// 		while(words != NULL)
-// 		{
-// 			i += 1;
-// 			printf("\n#%d. word: %s, type %d", i, words->word, words->type);
-// 			words = words->next;
-// 		}
-// 		break ;
+		// array = do_array(words, count_list_input(words));
 
+// 		free(input);
+// 		free(words);
 // 	}
 // 	return (0);
 // }
-
-// copy envp to stack and after that mutate the PATH when execv usiung it
-// int	main(int argc, char **argv, char **envp)
-
-int	main(int argc, char **argv, char **envp)
-{
-	t_input	*command;
-	char	*input;
-	t_env	*my_env;
-	char	*inputs[] = {"ls", "-l", NULL};
-	char	*cmd[] = {"echo", "hello", NULL};
-	int		i;
-
-	my_env = init_env(envp);
-	if (command == NULL)
-		exit(3);
-	command = initialize_command();
-	i = 0;
-	// while (command->argv[i])
-	// {
-	// 	printf("%s", command->argv[i]);
-	// 	i++;
-	// }
-	what_command(command, my_env);
-	// MAIN INPUT LOOP
-	// while (42)
-	// {
-	// 	input = readline("Minishell % ");
-	// 	if (input == NULL)
-	// 		break ;
-	// 	if (*input == '\0')
-	// 	{
-	// 		free(input);
-	// 		continue ;
-	// 	}
-	// 	//what_command(input, my_env);
-	// }
-	return (0);
-}
-
-// function to copy envp to stack
-// execve("/bin/echo", cmd, envp);
-// words = malloc(sizeof(*words));
-// if (words == NULL)
-// 	exit(3);
-// print_my_env(my_env); // function to print env list

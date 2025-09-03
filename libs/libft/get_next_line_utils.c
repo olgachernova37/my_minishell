@@ -6,7 +6,7 @@
 /*   By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:39:52 by olcherno          #+#    #+#             */
-/*   Updated: 2025/04/29 17:21:26 by olcherno         ###   ########.fr       */
+/*   Updated: 2025/09/03 18:00:01 by olcherno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,35 +39,6 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (res);
 }
 
-size_t	ft_strlen(const char *c)
-{
-	size_t	i;
-
-	i = 0;
-	if (!c)
-	{
-		return (0);
-	}
-	while (c[i] != '\0')
-	{
-		i++;
-	}
-	return (i);
-}
-
-char	*ft_strchr(const char *s, int c)
-{
-	unsigned int	i;
-
-	i = 0;
-	while (s[i])
-	{
-		if (s[i] == (char)c)
-			return ((char *)(s + i));
-		i++;
-	}
-	return (NULL);
-}
 
 char	*ft_strncpy(char *dest, char *src, unsigned int n)
 {

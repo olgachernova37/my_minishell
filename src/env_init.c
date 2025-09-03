@@ -6,56 +6,73 @@
 /*   By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 18:50:50 by olcherno          #+#    #+#             */
-/*   Updated: 2025/07/28 19:34:30 by olcherno         ###   ########.fr       */
+/*   Updated: 2025/09/03 18:01:41 by olcherno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 #include <string.h>
 
-void	print_my_env(t_env *env) // Function to print the environment variables
+// func for tests
+
+void	print_my_env(t_env *env)
 {
-	t_env *current = env;
-	while (current)
+    t_env *tmp = env;
+
+    while (tmp != NULL)
+    {
+        printf("%s=%s\n", tmp->key, tmp->value);
+        tmp = tmp->next;
+    }
+}
+
+void	add_new_node(t_env **list, t_env *new_node)
+{
+	t_env	*tmp;
+
+	if (!list || !new_node)
+		return ;
+	if (*list == NULL)
+		*list = new_node;
+	else
 	{
-		if (current->value)
-			ft_printf("%s=%s\n", current->key, current->value);
-		else
-			ft_printf("%s=\n", current->key);
-		current = current->next;
+		tmp = *list;
+		while (tmp->next != NULL)
+			tmp = tmp->next;
+		tmp->next = new_node;
 	}
 }
 
-t_env	*init_env(char **envp)
+t_env	*env_init(char **envp)
 {
-	t_env	*env_list;
 	t_env	*new_node;
+	t_env	*envp_list;
 	char	*equals_pos;
 	int		i;
-
-	env_list = NULL;
+	
 	i = 0;
+	envp_list = NULL;
 	while (envp[i])
 	{
 		new_node = malloc(sizeof(t_env));
 		if (!new_node)
-			exit(1); // handle memory allocation error
+			exit(1);
+		new_node->next = NULL;
 		equals_pos = strchr(envp[i], '=');
 		if (equals_pos)
 		{
-			*equals_pos = '\0'; // temporarily null-terminate
-			new_node->key = ft_strdup(envp[i]);
-			new_node->value = ft_strdup(equals_pos + 1);
-			*equals_pos = '='; // restore original string
+			*equals_pos = '\0';
+			new_node->key = strdup(envp[i]);
+			*equals_pos = '=';
+			new_node->value = strdup(equals_pos + 1);
 		}
 		else
 		{
-			new_node->key = ft_strdup(envp[i]);
-			new_node->value = ft_strdup("");
+			new_node->key = strdup(envp[i]);
+			new_node->value = strdup("");
 		}
-		new_node->next = env_list;
-		env_list = new_node;
+		add_new_node(&envp_list, new_node);
 		i++;
 	}
-	return (env_list);
+	return (envp_list);
 }
