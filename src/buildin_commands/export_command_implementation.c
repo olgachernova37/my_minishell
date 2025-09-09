@@ -6,7 +6,7 @@
 /*   By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 23:50:53 by olcherno          #+#    #+#             */
-/*   Updated: 2025/09/03 18:11:18 by olcherno         ###   ########.fr       */
+/*   Updated: 2025/09/04 18:36:12 by olcherno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,23 +47,57 @@ char	**bubble_sort(char **array, int size)
 	return (array);
 }
 
-int	only_export(char **input, char **array_env)
+int	only_export(char **input, t_env *env)
 {
-	char	**sorted_env;
+	t_env	*tmp;
+	char	**array;
+	int		size;
 	int		i;
 
-	sorted_env = bubble_sort(array_env, get_array_size(array_env));
-	if (!sorted_env)
+	if (!env)
+	{
+		printf("declare -x\n");
+		return (0);
+	}
+	tmp = env;
+	size = count_list_env(env);
+	if (size == 0)
+		return (0);
+	array = malloc(sizeof(char *) * (size + 1));
+	if (!array)
 		return (1);
 	i = 0;
-	while (sorted_env[i])
+	while (tmp != NULL)
 	{
-		printf("declare -x %s\n", sorted_env[i]);
+		if (tmp->key && tmp->value && ft_strlen(tmp->value) > 0)
+			array[i] = strjoin_modified(tmp->key, tmp->value);
+		else if (tmp->key)
+			array[i] = ft_strdup(tmp->key);
+		else
+			array[i] = ft_strdup("");
+		if (!array[i])
+		{
+			while (--i >= 0)
+				free(array[i]);
+			free(array);
+			return (1);
+		}
+		tmp = tmp->next;
 		i++;
 	}
-	free(sorted_env);
+	array[i] = NULL;
+	array = bubble_sort(array, size);
+	i = 0;
+	while (array[i])
+	{
+		printf("declare -x %s\n", array[i]);
+		free(array[i]);
+		i++;
+	}
+	free(array);
 	return (0);
 }
+
 size_t	joined_array_len(char **str)
 {
 	size_t	len;
@@ -114,29 +148,33 @@ int	check_export_form(const char *input)
     else
         return 2; // VAR=value
 }
-int only_var(char *input, t_env *env)
+int only_var(char *input, t_env **env)
 {
-    t_env *tmp = env;
+    t_env *tmp;
     t_env *new_node;
 
-    while (tmp)
-    {
-        if (ft_strcmp(tmp->key, input) == 0)
-            return (0);
-        if (tmp->next == NULL)
-            break;
-        tmp = tmp->next;
-    }
-    new_node = malloc(sizeof(t_env));
-    if (!new_node)
-        return (1);
-    new_node->key = ft_strdup(input);
-    new_node->next = NULL;
     if (!env)
-        env = new_node;
-    else
-        tmp->next = new_node;
-    return (0);
+        return (1);
+    tmp = *env;
+	while (tmp)
+	{
+		if (ft_strcmp(tmp->key, input) == 0)
+			return (0); // Variable already exists, do nothing
+		if (tmp->next == NULL)
+			break;
+		tmp = tmp->next;
+	}
+	new_node = malloc(sizeof(t_env));
+	if (!new_node)
+		return (1);
+	new_node->key = ft_strdup(input);
+	new_node->value = ft_strdup("");
+	new_node->next = NULL;
+	if (!*env)
+		*env = new_node;
+	else
+		tmp->next = new_node;
+	return (0);
 }
 char *input_parse_key_export(char *input)
 {
@@ -154,83 +192,110 @@ char *input_parse_value_export(char *input)
     return eq + 1;           // Points to value (may be empty string)
 }
 
-int var_and_value(char *input, t_env *env)
+int var_and_value(char *input, t_env **env)
 {
-    t_env *tmp = env;
+    t_env *tmp;
     t_env *new_node;
+    char *key;
 
+    if (!env)
+        return (1);
+    key = input_parse_key_export(input);
+    if (!key)
+        return (1);
+    tmp = *env;
     while (tmp)
     {
-        if (ft_strcmp(tmp->key, input) == 0)
+        if (ft_strcmp(tmp->key, key) == 0)
+        {
+            free(tmp->value);
+            tmp->value = ft_strdup(input_parse_value_export(input));
+            free(key);
             return (0);
+        }
         if (tmp->next == NULL)
             break;
         tmp = tmp->next;
     }
     new_node = malloc(sizeof(t_env));
     if (!new_node)
+    {
+        free(key);
         return (1);
-    new_node->key = input_parse_key_export(input);
-    new_node->value = input_parse_value_export(input);
+    }
+    new_node->key = key;
+    new_node->value = ft_strdup(input_parse_value_export(input));
     new_node->next = NULL;
-    if (!env)
-        env = new_node;
+    if (!*env)
+        *env = new_node;
     else
         tmp->next = new_node;
     return (0);
 }
 
-int var_and_equal(char *input, t_env *env)
+int var_and_equal(char *input, t_env **env)
 {
-	t_env *tmp = env;
+    t_env *tmp;
     t_env *new_node;
+    char *key;
+
+    if (!env)
+        return (1);
+    key = input_parse_key_export(input);
+    if (!key)
+        return (1);
+    tmp = *env;
     while (tmp)
     {
-        if (ft_strcmp(tmp->key, input) == 0)
+        if (ft_strcmp(tmp->key, key) == 0)
+        {
+            free(tmp->value);
+            tmp->value = ft_strdup("");
+            free(key);
             return (0);
+        }
         if (tmp->next == NULL)
             break;
         tmp = tmp->next;
     }
     new_node = malloc(sizeof(t_env));
     if (!new_node)
+    {
+        free(key);
         return (1);
-    new_node->key = ft_strdup(input);
+    }
+    new_node->key = key;
     new_node->value = ft_strdup("");
     new_node->next = NULL;
-    if (!env)
-        env = new_node;
+    if (!*env)
+        *env = new_node;
     else
         tmp->next = new_node;
     return (0);
 }
 
-int	one_var(char *input, t_env *env)
+int	one_var(char *input, t_env **env)
 {
     int form = check_export_form(input);
     if (form == 0)
     {
-        
         printf("export VAR: add VAR with empty value if not present\n");
 		return (only_var(input, env));
     }
     else if (form == 1)
     {
-        // export VAR=
         printf("export VAR=: set VAR to empty string (add or update)\n");
 		return(var_and_equal(input, env));
     }
     else if (form == 2)
     {
-        // export VAR=value
-		
         printf("export VAR=value: add or update VAR with value\n");
 		return(var_and_value(input, env));
     }
 	return(0);
 }
 
-int	parsing_export(char **input, t_env *env)
+int	parsing_export(char **input, t_env **env)
 {
 	char	*var_name;
 	char	*var_value;
@@ -241,10 +306,6 @@ int	parsing_export(char **input, t_env *env)
 		print_array_error(input);
 		return (1);
 	}
-	// if (input[2] != NULL)
-	// {
-	// 	several_var(input, env);
-	// }
 	else
 	{
 		return (one_var(input[1], env));
@@ -252,15 +313,14 @@ int	parsing_export(char **input, t_env *env)
 	return (0);
 }
 
-int	export_command_implementation(char **input, t_env *env, char **array_env)
+int	export_command_implementation(char **input, t_env **env, char **array_env)
 {
 	int		i;
-	t_env	*tmp;
 
 	i = 1;
 	if (input[i] == NULL)
 	{
-		return (only_export(input, array_env));
+		return (only_export(input, *env));
 	}
 	else if ((input[i] != NULL))
 	{

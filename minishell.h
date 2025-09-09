@@ -6,7 +6,7 @@
 /*   By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 16:31:21 by olcherno          #+#    #+#             */
-/*   Updated: 2025/09/01 20:05:30 by olcherno         ###   ########.fr       */
+/*   Updated: 2025/09/09 21:39:22 by olcherno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@
 # include <termios.h>
 # include <unistd.h>
 
-extern int			exit_status;
+extern int exit_status;
 
 typedef enum
 {
@@ -107,37 +107,36 @@ size_t				ft_strlen(const char *s);
 
 // what_command.c
 bool				is_command_buildin(char **input);
-void				what_command(char **input, t_env *my_env, char **array_env);
-int				echo_command_implementation(char **input);
-int 				pwd_command_implementation(t_env *my_env);
-// int 				export_command_implementation(char **input);
-// int 				unset_command_implementation(char **input);
-int 				cd_command_implementation(char **input, t_env *my_env);
-// void 				exit_command_implementation(t_env *my_env);
+int					echo_command_implementation(char **input, t_env **env);
+int					pwd_command_implementation(t_env *my_env);
+int					cd_command_implementation(char **input, t_env *my_env);
 
-//testing help_file.c
-t_input *initialize_command();
+// testing help_file.c
+t_input				*initialize_command(void);
 
-//cd
-int	only_cd(char **input, t_env *env);
-int standard_cd(char **input, t_env *env);
-int previous_dir(char **input, t_env *env);
+// cd
+int					only_cd(char **input, t_env *env);
+int					standard_cd(char **input, t_env *env);
+int					previous_dir(char **input, t_env *env);
 
-//export
-int export_command_implementation(char **input,  t_env *env, char **array_env);
-char **bubble_sort(char **array, int size);
-int only_export(char **input, char **array_env);
+// export
+char				**bubble_sort(char **array, int size);
+int					only_export(char **input, t_env *env);
 
-
-
-int other_commands_implementation(char **input, t_env *env);
-char *ft_strjoin_free(char *s1, const char *s2);
-char	**env_list_to_envp(t_env *env);
-
+int					other_commands_implementation(char **input, t_env *env);
+char				*ft_strjoin_free(char *s1, const char *s2);
+char				**env_list_to_envp(t_env *env);
 
 // env
 t_env				*env_init(char **envp);
 void				print_my_env(t_env *env);
+
+// Updated function declarations
+int					export_command_implementation(char **input, t_env **env,
+						char **array_env);
+int					unset_command_implementation(t_env **env, char **input);
+void				what_command(char **input, t_env **my_env,
+						char **array_env);
 
 // // parsing.c
 // t_input				*make_word(t_input *words, char *input);

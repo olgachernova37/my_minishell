@@ -6,11 +6,13 @@
 /*   By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 16:30:53 by olcherno          #+#    #+#             */
-/*   Updated: 2025/09/01 23:01:51 by olcherno         ###   ########.fr       */
+/*   Updated: 2025/09/09 21:31:06 by olcherno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+int exit_status = 0; 
 
 // func for tests
 void	print_og_env(char **envp)
@@ -31,6 +33,7 @@ int	main(int argc, char **argv, char **envp)
 	char	**array;
 	t_input	*words;
 	t_env	*env;
+	 
 	
 	t_env	*env_tmp;
 	t_input *tmp_wrds;
@@ -78,10 +81,10 @@ int	main(int argc, char **argv, char **envp)
 		while (tmp_wrds != NULL)
 		{
 			i += 1;
-			printf("\n#%d. word: %s, type %d", i, tmp_wrds->word, tmp_wrds->type);
+			// printf("\n#%d. word: %s, type %d", i, tmp_wrds->word, tmp_wrds->type);
 			tmp_wrds = tmp_wrds->next;
 		}
-		printf("\n\n");
+		// printf("\n\n");
 		array = do_input_array(words, count_list_input(words));
 
 		
@@ -94,7 +97,7 @@ int	main(int argc, char **argv, char **envp)
 		// printf("%s\n", array[i]);
 		///
 		env_array = do_env_array(env, count_list_env(env));
-		what_command(array, env, env_array);
+		what_command(array, &env, env_array);
 
 		free(input);
 		free(words);

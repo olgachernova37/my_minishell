@@ -6,7 +6,7 @@
 /*   By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 18:50:50 by olcherno          #+#    #+#             */
-/*   Updated: 2025/09/03 18:01:41 by olcherno         ###   ########.fr       */
+/*   Updated: 2025/09/04 16:57:44 by olcherno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,13 @@ void	print_my_env(t_env *env)
 
     while (tmp != NULL)
     {
-        printf("%s=%s\n", tmp->key, tmp->value);
+        if (tmp->key)
+        {
+            if (tmp->value)
+                printf("%s=%s\n", tmp->key, tmp->value);
+            else
+                printf("%s\n", tmp->key);
+        }
         tmp = tmp->next;
     }
 }
@@ -62,14 +68,21 @@ t_env	*env_init(char **envp)
 		if (equals_pos)
 		{
 			*equals_pos = '\0';
-			new_node->key = strdup(envp[i]);
+			new_node->key = ft_strdup(envp[i]);
 			*equals_pos = '=';
-			new_node->value = strdup(equals_pos + 1);
+			new_node->value = ft_strdup(equals_pos + 1);
 		}
 		else
 		{
-			new_node->key = strdup(envp[i]);
-			new_node->value = strdup("");
+			new_node->key = ft_strdup(envp[i]);
+			new_node->value = ft_strdup("");
+		}
+		if (!new_node->key || !new_node->value)
+		{
+			free(new_node->key);
+			free(new_node->value);
+			free(new_node);
+			exit(1);
 		}
 		add_new_node(&envp_list, new_node);
 		i++;
