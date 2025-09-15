@@ -123,7 +123,7 @@ int					previous_dir(char **input, t_env *env);
 char				**bubble_sort(char **array, int size);
 int					only_export(char **input, t_env *env);
 
-int					other_commands_implementation(char **input, t_env *env);
+int					other_commands_implementation(char **input, t_env **env);
 char				*ft_strjoin_free(char *s1, const char *s2);
 char				**env_list_to_envp(t_env *env);
 

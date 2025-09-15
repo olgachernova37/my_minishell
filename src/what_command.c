@@ -69,7 +69,8 @@ void	what_command(char** input, t_env **my_env, char** array_env)
 		which_buildin_command(input, my_env, array_env);
         
 	
-		// else
+	 else
+	 	exit_status = other_commands_implementation(input, my_env);	
 		// {
 		// 	char *cmd[] = {input->word, NULL};
 		// // Execute the command with the environment
