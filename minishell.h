@@ -33,7 +33,7 @@
 # include <termios.h>
 # include <unistd.h>
 
-extern int exit_status;
+extern int			exit_status;
 
 typedef enum
 {
@@ -137,6 +137,7 @@ int					export_command_implementation(char **input, t_env **env,
 int					unset_command_implementation(t_env **env, char **input);
 void				what_command(char **input, t_env **my_env,
 						char **array_env);
+void signal_handler(int sig);
 
 // // parsing.c
 // t_input				*make_word(t_input *words, char *input);

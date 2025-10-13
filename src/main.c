@@ -12,7 +12,7 @@
 
 #include "../minishell.h"
 
-int exit_status = 0; 
+int		exit_status = 0;
 
 // func for tests
 void	print_og_env(char **envp)
@@ -33,32 +33,13 @@ int	main(int argc, char **argv, char **envp)
 	char	**array;
 	t_input	*words;
 	t_env	*env;
-	 
-	
 	t_env	*env_tmp;
-	t_input *tmp_wrds;
-	char 	**env_array;
+	t_input	*tmp_wrds;
+	char	**env_array;
 	int		i;
-	
+
 	env = env_init(envp);
-	////
-	// env_tmp = env;
-	// env_array = do_env_array(env, count_list_env(env));
-	// i = 0;
-	// printf("ENV LIST:\n");
-	// while(env_tmp != NULL)
-	// {
-	// 	printf("#%d %s=%s\n", i++, env_tmp->key, env_tmp->value);
-	// 	env_tmp = env_tmp->next;
-	// }
-	// i = 0;
-	// printf("\nENV ARRAY:\n");
-	// while(i < (count_list_env(env) + 1))
-	// {
-	// 	printf("#%d %s\n", i, env_array[i]);
-	// 	i++;
-	// }
-	////
+	init_signals();
 	read_history(".minishell_history");
 	while (42)
 	{
@@ -67,10 +48,14 @@ int	main(int argc, char **argv, char **envp)
 		array = NULL;
 		words = NULL;
 		input = readline("Minishell % ");
+		signal(SIGINT, "signal_handler");
 		if (input == NULL)
-			break;
+		{
+			printf("exit\n");
+			break ;
+		}
 		if (*input)
-        	add_history(input);
+			add_history(input);
 		if (*input == '\0' || !validate_input(input))
 		{
 			free(input);
@@ -81,13 +66,12 @@ int	main(int argc, char **argv, char **envp)
 		while (tmp_wrds != NULL)
 		{
 			i += 1;
-			// printf("\n#%d. word: %s, type %d", i, tmp_wrds->word, tmp_wrds->type);
+			// printf("\n#%d. word: %s, type %d", i, tmp_wrds->word,
+			tmp_wrds->type;
 			tmp_wrds = tmp_wrds->next;
 		}
 		// printf("\n\n");
 		array = do_input_array(words, count_list_input(words));
-
-		
 		///
 		// i = 0;
 		// array = do_input_array(words, count_list_input(words));
@@ -98,7 +82,6 @@ int	main(int argc, char **argv, char **envp)
 		///
 		env_array = do_env_array(env, count_list_env(env));
 		what_command(array, &env, env_array);
-
 		free(input);
 		free(words);
 	}
@@ -130,7 +113,7 @@ int	main(int argc, char **argv, char **envp)
 // 			continue ;
 // 		}
 // 		words = tokenize(words, input);
-		// array = do_array(words, count_list_input(words));
+// array = do_array(words, count_list_input(words));
 
 // 		free(input);
 // 		free(words);

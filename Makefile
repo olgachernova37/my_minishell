@@ -11,7 +11,7 @@
 # **************************************************************************** #
 
 
-CC = cc -g # cc 
+CC = cc -g # cc
 # CFLAGS = -g -Wall -Wextra -Werror
 NAME = minishell
 SRCDIR = src
@@ -21,10 +21,10 @@ FTPRINTF_DIR = libs/libftprintf
 COMMAND_DIR = src/commands
 
 
-SRC_OP = do_array.c main.c env_init.c tokenizer.c help_file.c tokenizer_utils.c tokenizer_utils_2.c utils.c validate_input.c validate_input_2.c exit.c what_command.c other_commands.c \
+SRC_OP = do_array.c main.c env_init.c tokenizer.c signal.c help_file.c tokenizer_utils.c tokenizer_utils_2.c utils.c validate_input.c validate_input_2.c exit.c what_command.c other_commands.c \
 
 SRC_DATA = buildin_commands/cd_command_implementation.c    buildin_commands/exit_command_implementation.c    buildin_commands/pwd_command_implementation.c \
-buildin_commands/echo_command_implementation.c  buildin_commands/export_command_implementation.c  buildin_commands/unset_command_implementation.c 
+buildin_commands/echo_command_implementation.c  buildin_commands/export_command_implementation.c  buildin_commands/unset_command_implementation.c
 
 SRC = $(SRC_OP) $(SRC_DATA)
 
@@ -46,7 +46,7 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR)
 
 # Rules to build the libraries # making makefile of libft
 $(LIBFTDIR)/libft.a:
-	$(MAKE) -C $(LIBFTDIR) 
+	$(MAKE) -C $(LIBFTDIR)
 
 $(FTPRINTF_DIR)/libftprintf.a:    # making makefile of printf
 	$(MAKE) -C $(FTPRINTF_DIR)
