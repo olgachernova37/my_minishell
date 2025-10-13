@@ -10,8 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
-
 #include "../minishell.h"
 
 // Define the global variable
@@ -20,7 +18,7 @@
 
 bool	is_command_buildin(char **input)
 {
-    t_input *f_token;
+	t_input	*f_token;
 
 	if (ft_strncmp(input[0], "cd", 2) == 0)
 		return (true);
@@ -53,30 +51,20 @@ void	which_buildin_command(char **input, t_env **my_env, char **array_env)
 	else if (ft_strncmp(input[0], "cd", 2) == 0)
 		exit_status = cd_command_implementation(input, *my_env);
 	// else if (ft_strncmp(input[0], "exit", 4) == 0)
-		// exit_command_implementation(my_env);
+	// exit_command_implementation(my_env);
 	else if (ft_strncmp(input[0], "env", 3) == 0)
 	{
 		print_my_env(*my_env);
 		exit_status = 0;
 	}
-	// Temporary debug - remove this later
-	//printf("DEBUG: Command '%s' returned exit_status: %d\n", input[0], exit_status);
+	else if (ft_strncmp(input[0], "exit", 4) == 0)
+		exit_status = exit_command_implementation(*my_env);
 }
 
-void	what_command(char** input, t_env **my_env, char** array_env)
+void	what_command(char **input, t_env **my_env, char **array_env)
 {
 	if (is_command_buildin(input))
 		which_buildin_command(input, my_env, array_env);
-        
-	
-	 else
-	 	exit_status = other_commands_implementation(input, my_env);	
-		// {
-		// 	char *cmd[] = {input->word, NULL};
-		// // Execute the command with the environment
-		// 	execve(input->word, cmd, my_env);
-		// // Print error if execve fails
-		// 	perror("execve");
-		// }
+	else
+		exit_status = other_commands_implementation(input, my_env);
 }
-
