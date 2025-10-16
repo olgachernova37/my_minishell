@@ -6,14 +6,14 @@
 /*   By: dt <dt@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 16:11:33 by dt                #+#    #+#             */
-/*   Updated: 2025/08/31 21:00:16 by dt               ###   ########.fr       */
+/*   Updated: 2025/10/09 18:45:58 by dt               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-// clean stack func needed 
-void ft_clean(t_input *words, char *input)
+// clean stack func needed
+void	ft_clean(t_input *words, char *input)
 {
 	if (input)
 		free(input);
@@ -23,7 +23,7 @@ void ft_clean(t_input *words, char *input)
 		free(words);
 }
 
-size_t	ft_strlen(const char *s)
+size_t	ft_strlenn(const char *s)
 {
 	size_t	i;
 

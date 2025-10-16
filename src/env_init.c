@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_init.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dt <dt@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 18:50:50 by olcherno          #+#    #+#             */
-/*   Updated: 2025/09/04 16:57:44 by olcherno         ###   ########.fr       */
+/*   Updated: 2025/10/09 18:45:44 by dt               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,19 @@
 #include <string.h>
 
 // func for tests
-
 void	print_my_env(t_env *env)
 {
-    t_env *tmp = env;
+	t_env *tmp;
 
-    while (tmp != NULL)
-    {
-        if (tmp->key)
-        {
-            if (tmp->value)
-                printf("%s=%s\n", tmp->key, tmp->value);
-            else
-                printf("%s\n", tmp->key);
-        }
-        tmp = tmp->next;
-    }
+	if (env == NULL)
+		return;
+	tmp = env;
+	while(tmp->next != NULL)
+	{
+		printf("%s=%s", tmp->key, tmp->value);
+		printf("\n");
+		tmp = tmp->next;
+	}	
 }
 
 void	add_new_node(t_env **list, t_env *new_node)
@@ -64,25 +61,18 @@ t_env	*env_init(char **envp)
 		if (!new_node)
 			exit(1);
 		new_node->next = NULL;
-		equals_pos = strchr(envp[i], '=');
+		equals_pos = ft_strchr(envp[i], '='); // !!!
 		if (equals_pos)
 		{
 			*equals_pos = '\0';
-			new_node->key = ft_strdup(envp[i]);
+			new_node->key = strdup(envp[i]);
 			*equals_pos = '=';
-			new_node->value = ft_strdup(equals_pos + 1);
+			new_node->value = strdup(equals_pos + 1);
 		}
 		else
 		{
-			new_node->key = ft_strdup(envp[i]);
-			new_node->value = ft_strdup("");
-		}
-		if (!new_node->key || !new_node->value)
-		{
-			free(new_node->key);
-			free(new_node->value);
-			free(new_node);
-			exit(1);
+			new_node->key = strdup(envp[i]);
+			new_node->value = strdup("");
 		}
 		add_new_node(&envp_list, new_node);
 		i++;

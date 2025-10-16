@@ -12,17 +12,17 @@
 
 #include "../minishell.h"
 
-void	exit_command_implementation(t_env *my_env)
+void exit_command_implementation(t_env *my_env)
 {
-	// Free the environment variables
-	if (my_env)
-	{
-		free(my_env->key);
-		free(my_env->value);
-		free(my_env);
-	}
-	// Exit the program
-	ft_printf("Exiting minishell...\n");
-	exit_status = 0;
-	exit(0);
+    // Free the environment variables
+    if (my_env)
+    {
+        free(my_env->key);
+        free(my_env->value);
+        free(my_env);
+    }
+
+    // Exit the program
+    ft_printf("Exiting minishell...\n");
+    exit(0);
 }

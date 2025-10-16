@@ -6,7 +6,7 @@
 /*   By: dt <dt@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 00:39:29 by dt                #+#    #+#             */
-/*   Updated: 2025/08/29 08:43:38 by dt               ###   ########.fr       */
+/*   Updated: 2025/10/15 14:40:11 by dt               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,79 +22,78 @@ int	calc_len(t_input *new_word)
 	return (len);
 }
 
-int	*tk_word(char *input, int res[3])
+// if > 0 is complex ==> returns how many ', "
+// outter(that shouldnt be printed) are within one word
+int	is_complex_wrd(t_len_type_qts *ltq, char *input)
 {
-	int	inword;
-	int	i;
+	int				i;
+	int				q;
+	t_quote_state	*state;
 
 	i = 0;
-	inword = 0;
-	while (*input != '\0' && *input != ' ' && *input != '	' && *input != '<'
-			&& *input != '>' && *input != '|')
+	q = 0;
+	while (i < ltq->len && input[i])
 	{
-		if (!inword)
-		{
-			inword = 1;
-			res[0] = i;
-		}
-		i++;
-		input++;
+		state = dtct_inquotes(input[i++]);
+		if (state->new_pair)
+			q += 2;
 	}
-	res[1] = i;
-	res[2] = 1;
-	return (res);
+	reset_state_sttc(state);
+	return (q);
 }
 
-// 39 == '
-int	*tk_s_quotes(char *input, int res[3])
+// calcs how many quots that shouldn't be printed in the token
+// marks if the pointer is within quotes or out of them 
+t_quote_state	*dtct_inquotes(char cr)
 {
-	int	i;
-	int	inword;
+	static t_quote_state	chr = {0, 0, 0, 0};
 
-	i = 0;
-	inword = 0;
-	while (*input != '\0')
+	if (cr == '\0')
+		chr = (t_quote_state){0, 0, 0, 0};
+	if (chr.new_pair)
+		chr.new_pair = 0;
+	if ((cr == '\'' || cr == '"'))
 	{
-		if (*input == '\'' && !inword)
+		if (!chr.inquotes)
 		{
-			inword = 1;
-			res[0] = i + 1;
-			res[2] = 2;
+			chr.type = cr;
+			chr.closed = 0;
+			chr.inquotes = 1;
+			chr.new_pair = 1;
 		}
-		else if (*input == '\'' && inword)
+		else if (cr == chr.type)
 		{
-			res[1] = i;
-			break ;
+			chr.type = 0;
+			chr.closed = 1;
+			chr.inquotes = 0;
 		}
-		input++;
-		i++;
 	}
-	return (res);
+	else if (chr.closed)
+		chr.closed = 0;
+	return (&chr);
 }
 
-// 34 == "
-int	*tk_d_quotes(char *input, int res[3])
+t_len_type_qts	*tk_word(char *input, t_len_type_qts *ltq)
 {
-	int	i;
-	int	inword;
+	t_quote_state	*state;
+	char			*rst_input;
 
-	i = 0;
-	inword = 0;
-	while (*input != '\0')
+	rst_input = input;
+	while (*input)
 	{
-		if (*input == '"' && !inword)
-		{
-			inword = 1;
-			res[0] = i + 1;
-			res[2] = 3;
-		}
-		else if (*input == '"' && inword)
-		{
-			res[1] = i;
+		state = dtct_inquotes(*input);
+		if ((*input == ' ' || *input == '\t' || *input == '>' || *input == '<'
+				|| *input == '|') && !state->inquotes)
 			break ;
-		}
+		ltq->len++;
 		input++;
-		i++;
 	}
-	return (res);
+	input = rst_input;
+	reset_state_sttc(state);
+	ltq->qts = is_complex_wrd(ltq, input);
+	if (ltq->qts)
+		ltq->type = TOKEN_COMPLEX;
+	else
+		ltq->type = TOKEN_WORD;
+	return (ltq);
 }

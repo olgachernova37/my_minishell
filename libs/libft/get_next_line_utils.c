@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dt <dt@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:39:52 by olcherno          #+#    #+#             */
-/*   Updated: 2025/09/03 18:00:01 by olcherno         ###   ########.fr       */
+/*   Updated: 2025/10/07 13:59:36 by dt               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,23 @@
 // 	res[i + j] = '\0';
 // 	return (res);
 // }
+
+// size_t	ft_strlen(const char *c)
+// {
+// 	size_t	i;
+
+// 	i = 0;
+// 	if (!c)
+// 	{
+// 		return (0);
+// 	}
+// 	while (c[i] != '\0')
+// 	{
+// 		i++;
+// 	}
+// 	return (i);
+// }
+
 
 
 char	*ft_strncpy(char *dest, char *src, unsigned int n)

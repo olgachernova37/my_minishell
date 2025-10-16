@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   do_array.c                                         :+:      :+:    :+:   */
+/*   do_env_array.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dt <dt@student.42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/31 20:50:40 by dt                #+#    #+#             */
-/*   Updated: 2025/09/04 16:48:18 by olcherno         ###   ########.fr       */
+/*   Created: 2025/09/04 14:43:27 by dt                #+#    #+#             */
+/*   Updated: 2025/10/07 23:38:37 by dt               ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ char	*strjoin_modified(char const *s1, char const *s2)
 	size_t	len2;
 	size_t	i;
 
-	len1 = ft_strlen(s1);
-	len2 = ft_strlen(s2);
+	len1 = ft_strlenn(s1);
+	len2 = ft_strlenn(s2);
 	if (!s1 || !s2)
 		return (NULL);
 	i = 0;
@@ -42,27 +42,27 @@ char	*strjoin_modified(char const *s1, char const *s2)
 	return (new);
 }
 
-int	count_list_input(t_input *input)
+char	**do_env_array(t_env *env, int size)
 {
-	int	i;
-	t_input *tmp;
+	t_env	*tmp;
+	char	**res;
+	int		i;
 
 	i = 0;
-	if (input == NULL)
-		return (0);
-	tmp = input;
+	tmp = env;
+	res = malloc(sizeof(char *) * size + 1);
 	while (tmp != NULL)
 	{
+		res[i++] = strjoin_modified(tmp->key, tmp->value);
 		tmp = tmp->next;
-		i++;
 	}
-	return (i);
+	return (res);
 }
 
-int	count_list_env(t_env *env)
+int	count_env_ls(t_env *env)
 {
-	int	i;
-	t_env *tmp;
+	int		i;
+	t_env	*tmp;
 
 	i = 0;
 	if (env == NULL)
@@ -74,42 +74,4 @@ int	count_list_env(t_env *env)
 		i++;
 	}
 	return (i);
-}
-
-// add deviding by |
-char	**do_input_array(t_input *input, int size)
-{
-	int		i;
-	char	**res;
-	t_input	*tmp;
-
-	if (input == NULL)
-		return (NULL);
-	i = 0;
-	tmp = input;
-	res = malloc(sizeof(char *) * size + 1);
-	while (tmp != NULL && i < size)
-	{	
-		res[i++] = tmp->word;
-		tmp = tmp->next;
-	}
-	res[i] = NULL;
-	return (res);
-}
-
-char	**do_env_array(t_env *env, int size)
-{
-	t_env *tmp;
-	char **res;
-	int i;
-
-	i = 0;
-	tmp = env;
-	res = malloc(sizeof(char *) * size + 1);
-	while(tmp != NULL)
-	{
-		res[i++] = strjoin_modified(tmp->key, tmp->value);
-		tmp = tmp->next;
-	}
-	return res;
 }
