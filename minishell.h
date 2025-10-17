@@ -33,7 +33,7 @@
 # include <termios.h>
 # include <unistd.h>
 
-extern int			exit_status;
+extern int			g_exit_status;
 
 typedef enum
 {
@@ -171,10 +171,10 @@ int					env_cmp(const char *key, const char *input);
 t_xtnd				*xtnd_env(char *input, t_env **env);
 int					calc_og(char *input);
 void				connect_nodes(t_xtnd **head, t_xtnd *node);
-t_xtnd				*crt_xtnd_ls(char *input, t_env **env);
 int					calc_len_dif(t_xtnd *head);
 void				put_value(char *new_input, t_xtnd *ls, int n);
-char				*dollar_extend(char *input, t_env **env);
+t_xtnd				*crt_xtnd_ls(char *input, t_env **env, int g_exit_status);
+char				*dollar_extend(char *input, t_env **env, int g_exit_status);
 
 // echo_command_implementation.c
 int					echo_command_implementation(t_cmnd **cmnd_ls, t_env **env);
@@ -196,17 +196,43 @@ int					cd_command_implementation(char **input, t_env *my_env);
 t_input				*initialize_command(void);
 
 // cd
+void				change_pwd(t_env *env);
+void				change_oldpwd(t_env *env);
+void				print_pwd_and_oldpwd(t_env *env);
 int					only_cd(char **input, t_env *env);
-int					standard_cd(char **input, t_env *env);
+char				*get_env_value(t_env *env, const char *key);
+void				update_env_value(t_env *env, const char *key,
+						const char *new_value);
+int					change_to_oldpwd(char *path, char *prev_dir, char *cwd);
 int					previous_dir(char **input, t_env *env);
 
-// export
+// export_command_implementation.c functions
+int					get_array_size(char **array);
 char				**bubble_sort(char **array, int size);
+int					print_and_free_array(char **array);
+char				*get_env_string(t_env *tmp);
+char				**fill_export_array(t_env *env, int size);
 int					only_export(char **input, t_env *env);
-
-int					other_commands_implementation(char **input, t_env **env);
-char				*ft_strjoin_free(char *s1, const char *s2);
-char				**env_list_to_envp(t_env *env);
+size_t				joined_array_len(char **str);
+void				print_array_error(char **str);
+int					check_export_form(const char *input);
+int					only_var(char *input, t_env **env);
+char				*input_parse_key_export(char *input);
+char				*input_parse_value_export(char *input);
+t_env				*create_env_node(char *key, char *input);
+int					update_existing_env(t_env *tmp, char *key, char *input);
+int					add_new_node_ex(t_env **env, t_env *tmp, char *key,
+						char *input);
+int					var_and_value(char *input, t_env **env);
+t_env				*create_empty_node(char *key);
+int					update_existing_empty(t_env *tmp, char *key);
+int					var_and_equal(char *input, t_env **env);
+int					one_var(char *input, t_env **env);
+int					is_two_var(char **input);
+int					two_var(char **input, t_env **env);
+int					parsing_export(char **input, t_env **env);
+int					export_command_implementation(char **input, t_env **env,
+						char **array_env);
 
 // env
 t_env				*env_init(char **envp);
@@ -216,6 +242,8 @@ void				print_my_env(t_env *env);
 int					export_command_implementation(char **input, t_env **env,
 						char **array_env);
 int					unset_command_implementation(t_env **env, char **input);
+int					exit_command_implementation(t_env **my_env);
+int					other_commands_implementation(char **input, t_env **env);
 
 // signal.c
 void				handler_sig_int(int sig);

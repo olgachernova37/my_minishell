@@ -36,7 +36,7 @@ bool	is_command_buildin(char **input)
 
 int	which_buildin_command(t_cmnd *cmnd, t_env **my_env, char **array_env)
 {
-	if (ft_strncmp(cmnd->full_argv[0], "echo", 4) == 0) // argv --> full_argv
+	if (ft_strncmp(cmnd->full_argv[0], "echo", 4) == 0)
 		return (echo_command_implementation(&cmnd, my_env));
 	else if (ft_strncmp(cmnd->argv[0], "pwd", 3) == 0)
 		return (pwd_command_implementation(*my_env));
@@ -64,9 +64,9 @@ void	what_command(t_cmnd **cmnd_ls, t_env **my_env, char **array_env)
 	while (cmnd != NULL)
 	{
 		if (is_command_buildin(cmnd->argv))
-			exit_status = which_buildin_command(cmnd, my_env, array_env);
+			g_exit_status = which_buildin_command(cmnd, my_env, array_env);
 		else
-			exit_status = other_commands_implementation(cmnd->argv, my_env);
+			g_exit_status = other_commands_implementation(cmnd->argv, my_env);
 		cmnd = cmnd->next;
 	}
 }

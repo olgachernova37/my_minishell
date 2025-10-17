@@ -6,39 +6,39 @@ In a shell, exit codes are crucial for indicating command success/failure. Here'
 
 You already have this declared in your header:
 ```c
-extern int exit_status;
+extern int g_exit_status;
 ```
 
 You need to define it in one of your `.c` files (usually `main.c`):
 ```c
-int exit_status = 0;
+int g_exit_status = 0;
 ```
 
 ## 2. Update Exit Status After Each Command
 
-In your `which_buildin_command` function, make sure to capture the return value of each command and update the global `exit_status`:
+In your `which_buildin_command` function, make sure to capture the return value of each command and update the global `g_exit_status`:
 
 ```c
 void which_buildin_command(char **input, t_env **my_env, char **array_env)
 {
-    extern int exit_status;
+    extern int g_exit_status;
 
     if (ft_strncmp(input[0], "echo", 4) == 0)
-        exit_status = echo_command_implementation(input);
+        g_exit_status = echo_command_implementation(input);
     else if (ft_strncmp(input[0], "pwd", 3) == 0)
-        exit_status = pwd_command_implementation(*my_env);
+        g_exit_status = pwd_command_implementation(*my_env);
     else if (ft_strncmp(input[0], "export", 6) == 0)
-        exit_status = export_command_implementation(input, my_env, array_env);
+        g_exit_status = export_command_implementation(input, my_env, array_env);
     else if (ft_strncmp(input[0], "unset", 5) == 0)
-        exit_status = unset_command_implementation(my_env, input);
+        g_exit_status = unset_command_implementation(my_env, input);
     else if (ft_strncmp(input[0], "cd", 2) == 0)
-        exit_status = cd_command_implementation(input, *my_env);
+        g_exit_status = cd_command_implementation(input, *my_env);
     else if (ft_strncmp(input[0], "exit", 4) == 0)
-        exit_command_implementation(input, exit_status);
+        exit_command_implementation(input, g_exit_status);
     else if (ft_strncmp(input[0], "env", 3) == 0)
     {
         print_my_env(*my_env);
-        exit_status = 0; // env command always succeeds
+        g_exit_status = 0; // env command always succeeds
     }
 }
 ```
@@ -50,7 +50,7 @@ For commands that are not built-in, set appropriate exit codes:
 ```c
 void what_command(char** input, t_env **my_env, char** array_env)
 {
-    extern int exit_status;
+    extern int g_exit_status;
 
     if (is_command_buildin(input))
         which_buildin_command(input, my_env, array_env);
@@ -58,7 +58,7 @@ void what_command(char** input, t_env **my_env, char** array_env)
     {
         // For non-builtin commands, you'll need to implement execve
         // and capture the exit status from the child process
-        exit_status = 127; // Command not found (temporary)
+        g_exit_status = 127; // Command not found (temporary)
         printf("minishell: %s: command not found\n", input[0]);
     }
 }
@@ -108,19 +108,19 @@ Minishell % echo $?  # Should print 1
 
 ## 7. Implementation Notes
 
-- Every command should update `exit_status`
-- The `exit_status` should be accessible via `$?` expansion
+- Every command should update `g_exit_status`
+- The `g_exit_status` should be accessible via `$?` expansion
 - For external commands, use `fork()` and `waitpid()` to capture child process exit status
 - The shell itself should exit with the last command's exit status when `exit` is called without arguments
 
-The key is that every command should update `exit_status`, and this value should be accessible via `$?` expansion later.
+The key is that every command should update `g_exit_status`, and this value should be accessible via `$?` expansion later.
 
 
 
 
 ______________________________________________________________________________
 
-tester 
+tester
 cd minishell
 git clone https://github.com/LucasKuhn/minishell_tester.git
 cd minishell_tester

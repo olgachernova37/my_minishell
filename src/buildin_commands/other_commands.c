@@ -78,7 +78,6 @@ char	*find_command_path(char **input, t_env **env)
 		path_with_command = ft_strjoin(splited_path[i], input_command);
 		if (access(path_with_command, X_OK) == 0)
 		{
-			// printf("FOUND COMMAND: %s\n", path_with_command);
 			return (path_with_command);
 		}
 		i++;

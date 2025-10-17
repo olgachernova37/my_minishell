@@ -12,7 +12,7 @@
 
 #include "../minishell.h"
 
-int		exit_status = 0;
+int		g_exit_status = 0;
 
 void	printf_env(t_env *env)
 {
@@ -75,7 +75,7 @@ void	printf_cmnd_ls(t_cmnd *list)
 		while (tmp->rdrs)
 		{
 			printf("\n#%d redir\nType:%d,\nfilename: %s\n", i++,
-				(int)tmp->rdrs->redir_type, tmp->rdrs->filename);
+					(int)tmp->rdrs->redir_type, tmp->rdrs->filename);
 			tmp->rdrs = tmp->rdrs->next;
 		}
 		printf("\nhas rdr_in: %d\n", (int)tmp->rdr_in);
@@ -131,16 +131,17 @@ int	main(int argc, char **argv, char **envp)
 	char	*tmp;
 	char	*input;
 	char	**env_array;
-	t_cmnd	*list; 
+	t_cmnd	*list;
 
 	env = env_init(envp);
 	init_signals();
+	read_history(".minishell_history");
 	env_array = do_env_array(env, count_env_ls(env));
 	while (42)
 	{
 		words = NULL;
 		input = readline("Minishell % ");
-		signal(SIGINT, "signal_handler");
+		signal(SIGINT, handler_sig_int);
 		if (input == NULL)
 		{
 			printf("exit\n");
@@ -153,27 +154,14 @@ int	main(int argc, char **argv, char **envp)
 			free(input);
 			continue ;
 		}
-		input = dollar_extend(input, &env);
-		
+		input = dollar_extend(input, &env, g_exit_status);
 		//print_extened_input(input);// "debug"
-		
-		words = tokenize(words, input); // creates linked list of tokenized input
-		list = creat_cmnd_ls(words);    // creats linked list of commands
-		
+		words = tokenize(words, input);
+		// creates linked list of tokenized input
+		list = creat_cmnd_ls(words); // creats linked list of commands
 		// printf_cmnd_ls(list); // "debug" prints all stuff
-		
 		what_command(&list, &env, env_array);
-		
 	}
 	write_history(".minishell_history");
 	return (0);
 }
-
-// tmp = input; //for free(tmp);  del
-// words = tokenize(words, input);
-// printf_t_input(words);// del
-
-// printf("\n///////////Extendet dolla part///////////\n\n");// del
-
-// words = NULL;// del
-// input = tmp;// del
