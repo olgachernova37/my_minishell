@@ -14,6 +14,19 @@
 
 int		g_exit_status = 0;
 
+void free_input(t_input *words)
+{
+	t_input	*tmp;
+
+	while (words)
+	{
+		tmp = words;
+		words = words->next;
+		free(tmp->word);
+		free(tmp);
+	}
+}
+
 void	free_list(t_cmnd	*list)
 {
 	t_cmnd	*tmp;
@@ -195,7 +208,8 @@ int	main(int argc, char **argv, char **envp)
 		list = creat_cmnd_ls(words); // creats linked list of commands
 		// printf_cmnd_ls(list); // "debug" prints all stuff
 		what_command(&list, &env, env_array);
-		free_list(list);
+		//free_list(list);
+		free_input(words);
 	}
 	write_history(".minishell_history");
 	return (0);

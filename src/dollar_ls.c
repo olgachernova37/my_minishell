@@ -183,9 +183,24 @@ t_xtnd	*crt_xtnd_ls(char *input, t_env **env, int g_exit_status) {
   return (head);
 }
 
+static void	free_xtnds(t_xtnd *head)
+{
+    t_xtnd *tmp;
+
+    while (head)
+    {
+        tmp = head->next;
+        if (head->new)
+            free(head->new);
+        free(head);
+        head = tmp;
+    }
+}
+
 char	*dollar_extend(char *input, t_env **env, int g_exit_status) {
   t_quote_state *state;
   t_xtnd *xtnds;
+  t_xtnd *head;
   char *new_input;
   int n;
   int i;
@@ -197,10 +212,15 @@ char	*dollar_extend(char *input, t_env **env, int g_exit_status) {
   xtnds = crt_xtnd_ls(input, env, g_exit_status);
   if (!xtnds)
     return (ft_strdup(input));
+  head = xtnds; /* save head so we can free later */
+
   new_input =
       malloc(sizeof(char) * (ft_strlen(input) + calc_len_dif(xtnds) + 1));
   if (!new_input)
-    return (ft_strdup(input));
+  {
+      free_xtnds(head); /* free allocated xtnd list before returning */
+      return (ft_strdup(input));
+  }
   while (input[i]) {
     state = dtct_inquotes(input[i]);
     if (input[i] == '$' && input[i + 1] &&
@@ -216,5 +236,8 @@ char	*dollar_extend(char *input, t_env **env, int g_exit_status) {
   }
   new_input[n] = '\0';
   reset_state_sttc(state);
+
+  free_xtnds(head); /* free list and all node->new strings */
+
   return (new_input);
 }
