@@ -47,7 +47,7 @@ int	which_buildin_command(t_cmnd *cmnd, t_env **my_env, char **array_env)
 	else if (ft_strncmp(cmnd->argv[0], "cd", 2) == 0)
 		return (cd_command_implementation(cmnd->argv, *my_env));
 	else if (ft_strncmp(cmnd->argv[0], "exit", 4) == 0)
-		return (exit_command_implementation(my_env));
+		return (exit_command_implementation(my_env, array_env));
 	else if (ft_strncmp(cmnd->argv[0], "env", 3) == 0)
 	{
 		print_my_env(*my_env);

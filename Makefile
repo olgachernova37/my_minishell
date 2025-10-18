@@ -20,7 +20,7 @@ LIBFTDIR = libs/libft
 FTPRINTF_DIR = libs/libftprintf
 COMMAND_DIR = src/commands
 
-SRC_OP = cmnd_list_utils.c creat_cmnd_list.c do_env_array.c main.c env_init.c tokenizer.c help_file.c tokenizer_utils.c tokenizer_utils_2.c utils.c validate_input.c validate_input_2.c exit.c what_command.c dollar_ls.c signal.c \
+SRC_OP = cmnd_list_utils.c creat_cmnd_list.c do_env_array.c main.c env_init.c tokenizer.c help_file.c tokenizer_utils.c tokenizer_utils_2.c utils.c validate_input.c validate_input_2.c what_command.c dollar_ls.c signal.c \
 
 SRC_DATA = buildin_commands/cd_command_implementation.c    buildin_commands/exit_command_implementation.c    buildin_commands/pwd_command_implementation.c \
 buildin_commands/echo_command_implementation.c  buildin_commands/export_command_implementation.c  buildin_commands/unset_command_implementation.c \

@@ -242,7 +242,7 @@ void				print_my_env(t_env *env);
 int					export_command_implementation(char **input, t_env **env,
 						char **array_env);
 int					unset_command_implementation(t_env **env, char **input);
-int					exit_command_implementation(t_env **my_env);
+int					exit_command_implementation(t_env **my_env, char **array_env);
 int					other_commands_implementation(char **input, t_env **env);
 
 // signal.c

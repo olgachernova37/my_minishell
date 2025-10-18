@@ -14,6 +14,39 @@
 
 int		g_exit_status = 0;
 
+void	free_list(t_cmnd	*list)
+{
+	t_cmnd	*tmp;
+	t_rdrs	*rdr_tmp;
+	int		i;
+
+	while (list)
+	{
+		tmp = list;
+		list = list->next;
+		i = 0;
+		while (tmp->argv && tmp->argv[i])
+			free(tmp->argv[i++]);
+		free(tmp->argv);
+		i = 0;
+		while (tmp->full_argv && tmp->full_argv[i])
+			free(tmp->full_argv[i++]);
+		free (tmp->full_argv);
+		i = 0;
+		while (tmp->argv_type && tmp->argv_type[i])
+			free(tmp->argv_type[i++]);
+		free (tmp->argv_type);
+		while (tmp->rdrs)
+		{
+			rdr_tmp = tmp->rdrs;
+			tmp->rdrs = tmp->rdrs->next;
+			free(rdr_tmp->filename);
+			free(rdr_tmp);
+		}
+		free(tmp);
+	}
+}
+
 void	printf_env(t_env *env)
 {
 	if (!env)
@@ -134,9 +167,10 @@ int	main(int argc, char **argv, char **envp)
 	t_cmnd	*list;
 
 	env = env_init(envp);
-	init_signals();
+	
 	read_history(".minishell_history");
 	env_array = do_env_array(env, count_env_ls(env));
+	init_signals();
 	while (42)
 	{
 		words = NULL;
@@ -144,7 +178,7 @@ int	main(int argc, char **argv, char **envp)
 		signal(SIGINT, handler_sig_int);
 		if (input == NULL)
 		{
-			printf("exit\n");
+			g_exit_status = exit_command_implementation(&env, env_array);
 			break ;
 		}
 		if (*input)
@@ -161,6 +195,7 @@ int	main(int argc, char **argv, char **envp)
 		list = creat_cmnd_ls(words); // creats linked list of commands
 		// printf_cmnd_ls(list); // "debug" prints all stuff
 		what_command(&list, &env, env_array);
+		free_list(list);
 	}
 	write_history(".minishell_history");
 	return (0);
