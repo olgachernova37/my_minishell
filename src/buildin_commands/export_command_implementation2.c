@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   export_command_implementation.c                    :+:      :+:    :+:   */
+/*   export_command_implementation2.c                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dt <dt@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 23:50:53 by olcherno          #+#    #+#             */
-/*   Updated: 2025/10/07 23:38:50 by dt               ###   ########.fr       */
+/*   Updated: 2025/10/23 16:42:11 by olcherno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ int	check_export_form(const char *input)
 	else
 		return (2);
 }
+
 int	only_var(char *input, t_env **env)
 {
 	t_env	*tmp;

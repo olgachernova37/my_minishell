@@ -6,7 +6,7 @@
 #    By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/06 15:18:15 by olcherno          #+#    #+#              #
-#    Updated: 2025/10/16 16:20:54 by olcherno         ###   ########.fr        #
+#    Updated: 2025/10/23 16:40:36 by olcherno         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,12 +20,18 @@ LIBFTDIR = libs/libft
 FTPRINTF_DIR = libs/libftprintf
 COMMAND_DIR = src/commands
 
-SRC_OP = cmnd_list_utils.c creat_cmnd_list.c do_env_array.c main.c env_init.c tokenizer.c help_file.c tokenizer_utils.c tokenizer_utils_2.c utils.c validate_input.c validate_input_2.c what_command.c dollar_ls.c signal.c \
+SRC_OP = cmnd_ls_utils_0.c cmnd_ls_utils_1.c \
+crt_cmnd_ls.c do_env_array.c main.c env_init.c \
+tokenizer.c tokenizer_utils.c tokenizer_utils_2.c\
+utils.c validate_input.c validate_input_2.c what_command.c dollar_ls_utils.c \
+dollar_ls_0.c dollar_ls_1.c signal.c main_utils.c\
 
 SRC_DATA = buildin_commands/cd_command_implementation.c    buildin_commands/exit_command_implementation.c    buildin_commands/pwd_command_implementation.c \
 buildin_commands/echo_command_implementation.c  buildin_commands/export_command_implementation.c  buildin_commands/unset_command_implementation.c \
-buildin_commands/other_commands.c buildin_commands/cd_command_implementation2.c buildin_commands/export_command_implementation2.c  \
+buildin_commands/other_commands.c \
+buildin_commands/other_commands2.c buildin_commands/cd_command_implementation2.c buildin_commands/export_command_implementation2.c  \
 buildin_commands/export_command_implementation3.c buildin_commands/export_command_implementation4.c buildin_commands/export_command_implementation5.c
+
 
 SRC = $(SRC_OP) $(SRC_DATA)
 
@@ -34,8 +40,8 @@ SRCS = $(addprefix $(SRCDIR)/, $(SRC))
 
 # Rules of files
 $(NAME): $(OBJS) $(LIBFTDIR)/libft.a $(FTPRINTF_DIR)/libftprintf.a
-	$(CC) $(CFLAGS) $(OBJS) -L$(LIBFTDIR) -lft -L$(FTPRINTF_DIR) -lftprintf -lreadline -ltinfo -o $(NAME)
-
+	$(CC) $(CFLAGS) $(OBJS) -L$(LIBFTDIR) -lft -L$(FTPRINTF_DIR) -lftprintf -lreadline  -o $(NAME) 
+# add -ltinfo
 # Create necessary directories for object files
 $(OBJDIR):
 	@mkdir -p $(OBJDIR)/main

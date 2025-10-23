@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dt <dt@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 16:31:21 by olcherno          #+#    #+#             */
-/*   Updated: 2025/10/15 20:14:51 by dt               ###   ########.fr       */
+/*   Updated: 2025/10/23 20:36:52 by olcherno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,14 @@
 # include <unistd.h>
 
 extern int			g_exit_status;
+
+// POSIX PATH_MAX
+# include <limits.h>
+
+// macOS sometimes needs this for PATH_MAX
+# ifdef __APPLE__
+#  include <sys/syslimits.h>
+# endif
 
 typedef enum
 {
@@ -77,6 +85,7 @@ typedef struct s_rdrs
 	struct s_rdrs	*next;
 }					t_rdrs;
 
+// change
 typedef struct s_quote_state
 {
 	char			type;
@@ -110,18 +119,30 @@ typedef struct s_env
 	struct s_env	*next;
 }					t_env;
 
+// main_utils.c
+void				free_list(t_cmnd *list);
+void				print_env(t_env *env);
+void				print_og_env(char **envp);
+void				print_cmnd_ls(t_cmnd *list);
+void				print_input(t_input *list);
+void				print_extened_input(char *s);
+
 // creat_cmnd_list.c
 t_input				*move_ptr_cmnd(t_input *next_cmnd);
 void				set_apnd_hered_pipe(t_cmnd *node);
 void				do_rdrs(t_cmnd *node);
 t_cmnd				*setup_cmnd_node(t_cmnd *node, t_input *next_cmnd);
-t_cmnd				*creat_cmnd_ls(t_input *words);
+t_cmnd				*crt_cmnd_ls_lgc(int cmnd_qntt, t_cmnd *list,
+						t_cmnd *prev_node, t_input *words);
+t_cmnd				*crt_cmnd_ls(t_input *words);
 
-// cmnd_list_utils.c
+// cmnd_ls_utils_0.c
 void				set_to_zero(t_cmnd *cmnd_node);
 int					count_cmnds(t_input *words);
 int					count_cmnd_len(t_input *words);
 int					count_cmnd_len_argv(t_input *words);
+
+// cmnd_ls_utils_1.c
 void				do_cmnd_array(t_input *words, t_cmnd *node, int size);
 void				do_full_cmnd_array(t_input *words, t_cmnd *node, int size);
 void				do_cmnd_array_type(t_input *words, t_cmnd *node, int size);
@@ -161,20 +182,36 @@ char				**do_env_array(t_env *env, int size);
 int					count_env_ls(t_env *env);
 
 // utils.c
+int					is_delimiter(char c);
+int					another_one(int i, char *input, t_quote_state *st);
+int					if_logic(int i, char *input, t_quote_state *st);
 void				ft_clean(t_input *words, char *input);
 size_t				ft_strlenn(const char *s);
 
-// dollar_list.c
-
-void				reset_state_sttc(t_quote_state *state);
-int					env_cmp(const char *key, const char *input);
+// dollar_ls_0.c
 t_xtnd				*xtnd_env(char *input, t_env **env);
-int					calc_og(char *input);
-void				connect_nodes(t_xtnd **head, t_xtnd *node);
-int					calc_len_dif(t_xtnd *head);
+t_xtnd				*create_g_exit_status_node(int g_exit_status);
+t_xtnd				*crt_xtnd_ex_status(t_quote_state *state);
+int					env_cmp(const char *key, const char *input);
 void				put_value(char *new_input, t_xtnd *ls, int n);
+
+// dollar_ls_1.c
+static void			free_xtnds(t_xtnd *head);
+void				dollar_extend_logic(char *input, char *new_input,
+						t_xtnd *xtnds, t_xtnd *head);
+t_xtnd				*crt_xtnd_logic(char *input, t_env **env,
+						t_quote_state *st);
+char				*crt_nd_new(int len, char *input);
+t_xtnd				*pst_q(char *input);
 t_xtnd				*crt_xtnd_ls(char *input, t_env **env, int g_exit_status);
 char				*dollar_extend(char *input, t_env **env, int g_exit_status);
+
+// dollar_ls_utils.c
+void				reset_state_sttc(t_quote_state *state);
+void				connect_nodes(t_xtnd **head, t_xtnd *node);
+int					is_delimiter(char c);
+int					calc_og(char *input);
+int					calc_len_dif(t_xtnd *head);
 
 // echo_command_implementation.c
 int					echo_command_implementation(t_cmnd **cmnd_ls, t_env **env);
@@ -242,7 +279,8 @@ void				print_my_env(t_env *env);
 int					export_command_implementation(char **input, t_env **env,
 						char **array_env);
 int					unset_command_implementation(t_env **env, char **input);
-int					exit_command_implementation(t_env **my_env, char **array_env);
+int					exit_command_implementation(char **input, t_env **my_env,
+						char **array_env);
 int					other_commands_implementation(char **input, t_env **env);
 
 // signal.c
@@ -251,7 +289,27 @@ void				handler_sig_quit(int sig);
 int					exit_func(void);
 void				init_signals(void);
 
+/* other_comands.c*/
+void				free_split(char **split);
+char				*get_path_from_env(t_env **env);
+char				**input_with_null_terminator(char **input);
+char				**init_path_components(char **input, t_env **env);
+char				*try_command_in_dirs(char **splited_path,
+						char *input_command);
+char				*find_command_path(char **input, t_env **env);
+int					execute_command(char *path_with_command, char **input);
+int					handle_direct_path_command(char **input);
+int					other_commands_implementation(char **input, t_env **env);
+int					handle_path_command(char **input, t_env **env);
+int					wait_and_handle(pid_t pid, int *status, char **new_input);
+int					spawn_child(char *path_with_command, char **new_input,
+						pid_t *pid);
+void				parent_prepare_signals(void);
+
 // // parsing.c
-// t_input				*make_word(t_input *words, char *input);
+char				*extract_word(char *input, t_len_type_qts *ltq);
+t_input				*alloc_new_node(void);
+long long			parse_and_validate_exit_arg(char *arg);
+void				exit_with_numeric_error(char *arg);
 
 #endif

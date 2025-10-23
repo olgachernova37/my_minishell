@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cd_command_implementation2.c                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/10/19 20:42:50 by dt                #+#    #+#             */
+/*   Updated: 2025/10/23 16:41:07 by olcherno         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../minishell.h"
 
@@ -46,57 +57,6 @@ int	previous_dir(char **input, t_env *env)
 	update_env_value(env, "PWD", cwd);
 	return (0);
 }
-
-// int	previous_dir(char **input, t_env *env)
-// {
-//     char *path = NULL;
-//     t_env *tmp = env;
-//     char cwd[PATH_MAX];
-//     char prev_dir[PATH_MAX];
-
-//     while (tmp)
-//     {
-//         if (ft_strcmp(tmp->key, "OLDPWD") == 0)
-//         {
-//             path = tmp->value;
-//             break ;
-//         }
-//         tmp = tmp->next;
-//     }
-//     if (!path || !*path)
-//         return (printf("cd: OLDPWD not set\n"), 1);
-//     if (!getcwd(prev_dir, sizeof(prev_dir)))
-//         return (perror("getcwd"), 1);
-//     if (chdir(path) == -1)
-//         return (perror("cd"), 1);
-//     if (getcwd(cwd, sizeof(cwd)))
-//         printf("%s\n", cwd);
-//     else
-//         perror("getcwd");
-//     tmp = env;
-//     while (tmp)
-//     {
-//         if (ft_strcmp(tmp->key, "OLDPWD") == 0)
-//         {
-//             free(tmp->value);
-//             tmp->value = ft_strdup(prev_dir);
-//             break ;
-//         }
-//         tmp = tmp->next;
-//     }
-//     tmp = env;
-//     while (tmp)
-//     {
-//         if (ft_strcmp(tmp->key, "PWD") == 0)
-//         {
-//             free(tmp->value);
-//             tmp->value = ft_strdup(cwd);
-//             break ;
-//         }
-//         tmp = tmp->next;
-//     }
-//     return (0);
-// }
 
 int	standard_cd(char **input, t_env *env)
 {
