@@ -293,9 +293,6 @@ void				init_signals(void);
 void				free_split(char **split);
 char				*get_path_from_env(t_env **env);
 char				**input_with_null_terminator(char **input);
-char				**init_path_components(char **input, t_env **env);
-char				*try_command_in_dirs(char **splited_path,
-						char *input_command);
 char				*find_command_path(char **input, t_env **env);
 int					execute_command(char *path_with_command, char **input);
 int					handle_direct_path_command(char **input);
@@ -311,5 +308,20 @@ char				*extract_word(char *input, t_len_type_qts *ltq);
 t_input				*alloc_new_node(void);
 long long			parse_and_validate_exit_arg(char *arg);
 void				exit_with_numeric_error(char *arg);
+
+// Redirections
+// Redirections implementation
+int		handle_input_redir(t_rdrs *rdr);
+int		handle_output_redir(t_rdrs *rdr);
+int		handle_append_redir(t_rdrs *rdr);
+int		handle_heredoc_redir(t_rdrs *rdr);
+int		process_single_redir(t_rdrs *rdr);
+int		implamentation_redir(t_cmnd *cmnd);
+
+// Heredoc implementation
+char	*get_heredoc_filename(void);
+void	heredoc_signal_handler(int sig);
+int		write_heredoc_content(int fd, char *delimiter);
+int		handle_heredoc(char *delimiter);
 
 #endif

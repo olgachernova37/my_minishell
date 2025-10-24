@@ -1,58 +1,89 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   other_commands3.c                                  :+:      :+:    :+:   */
+/*   other_commands_utils.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/27 16:30:53 by olcherno          #+#    #+#             */
-/*   Updated: 2025/10/23 20:37:50 by olcherno         ###   ########.fr       */
+/*   Created: 2025/10/24 00:00:00 by olcherno          #+#    #+#             */
+/*   Updated: 2025/10/24 00:00:00 by olcherno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	handle_direct_path_command(char **input)
+void	free_split(char **split)
 {
-	int	i;
+    int	i;
 
-	if (access(input[0], X_OK) == 0)
-	{
-		i = execute_command(input[0], input);
-		return (i);
-	}
-	else
-	{
-		perror(input[0]);
-		return (127);
-	}
+    i = 0;
+    if (!split)
+        return ;
+    while (split[i])
+    {
+        free(split[i]);
+        i++;
+    }
+    free(split);
 }
 
-int	handle_path_command(char **input, t_env **env)
+char	*get_path_from_env(t_env **env)
 {
-	char	*path_with_command;
-	int		i;
+    t_env	*tmp;
 
-	path_with_command = find_command_path(input, env);
-	if (path_with_command)
-	{
-		i = execute_command(path_with_command, input);
-		free(path_with_command);
-		return (i);
-	}
-	else
-	{
-		fprintf(stderr, "bash: %s: command not found\n", input[0]);
-		return (127);
-	}
+    tmp = *env;
+    while (tmp)
+    {
+        if (ft_strncmp(tmp->key, "PATH", 4) == 0 
+            && ft_strlen(tmp->key) == 4)
+            return (tmp->value);
+        tmp = tmp->next;
+    }
+    return (NULL);
 }
 
-int	other_commands_implementation(char **input, t_env **env)
+ char	*try_path(char *dir, char *command)
 {
-	if (!input || !input[0])
-		return (0);
-	if (ft_strchr(input[0], '/'))
-		return (handle_direct_path_command(input));
-	else
-		return (handle_path_command(input, env));
+    char	*path_with_command;
+    char	*tmp;
+
+    tmp = ft_strjoin(dir, "/");
+    if (!tmp)
+        return (NULL);
+    path_with_command = ft_strjoin(tmp, command);
+    free(tmp);
+    if (!path_with_command)
+        return (NULL);
+    if (access(path_with_command, X_OK) == 0)
+        return (path_with_command);
+    free(path_with_command);
+    return (NULL);
+}
+
+char	*find_command_path(char **input, t_env **env)
+{
+    char	**splited_path;
+    char	*path_value;
+    char	*result;
+    int		i;
+
+    path_value = get_path_from_env(env);
+    if (!path_value)
+        return (NULL);
+    splited_path = ft_split(path_value, ':');
+    if (!splited_path)
+        return (NULL);
+    i = 0;
+    while (splited_path[i])
+    {
+        result = try_path(splited_path[i], input[0]);
+        if (result)
+        {
+            free_split(splited_path);
+            return (result);
+        }
+        i++;
+    }
+    free_split(splited_path);
+    return (NULL);
 }

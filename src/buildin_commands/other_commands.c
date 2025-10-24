@@ -12,31 +12,6 @@
 
 #include "../minishell.h"
 
-void	free_split(char **split)
-{
-	int	i;
-
-	i = 0;
-	if (!split)
-		return ;
-	while (split[i])
-	{
-		free(split[i]);
-		i++;
-	}
-	free(split);
-}
-
-char	*get_path_from_env(t_env **env)
-{
-	while (*env)
-	{
-		if (ft_strncmp((*env)->key, "PATH", ft_strlen("PATH")) == 0)
-			return ((*env)->value);
-		env = &((*env)->next);
-	}
-	return (NULL);
-}
 
 char	**input_with_null_terminator(char **input)
 {
