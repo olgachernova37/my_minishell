@@ -93,17 +93,14 @@ int	one_var(char *input, t_env **env)
 	form = check_export_form(input);
 	if (form == 0)
 	{
-		printf("export VAR: add VAR with empty value if not present\n");
 		return (only_var(input, env));
 	}
 	else if (form == 1)
 	{
-		printf("export VAR=: set VAR to empty string (add or update)\n");
 		return (var_and_equal(input, env));
 	}
 	else if (form == 2)
 	{
-		printf("export VAR=value: add or update VAR with value\n");
 		return (var_and_value(input, env));
 	}
 	return (0);

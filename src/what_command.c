@@ -30,7 +30,6 @@ bool	is_command_buildin(char **input)
 
 	if (match_buildin(input[0], "cd"))
 	{
-		printf("%s", input[0]);
 		return (true);
 	}
 	else if (match_buildin(input[0], "pwd"))
@@ -83,7 +82,6 @@ void	what_command(t_cmnd **cmnd_ls, t_env **my_env, char **array_env)
 		// Зберегти оригінальні stdin/stdout
 		stdin_backup = dup(STDIN_FILENO);
 		stdout_backup = dup(STDOUT_FILENO);
-		
 		// Застосувати перенаправлення
 		if (implamentation_redir(cmnd) != 0)
 		{
@@ -94,21 +92,18 @@ void	what_command(t_cmnd **cmnd_ls, t_env **my_env, char **array_env)
 			close(stdout_backup);
 			g_exit_status = 1;
 			cmnd = cmnd->next;
-			continue;
+			continue ;
 		}
-		
 		// Виконати команду (builtin або зовнішню)
 		if (is_command_buildin(cmnd->argv))
 			g_exit_status = which_buildin_command(cmnd, my_env, array_env);
 		else
 			g_exit_status = other_commands_implementation(cmnd->argv, my_env);
-		
 		// Відновити оригінальні stdin/stdout
 		dup2(stdin_backup, STDIN_FILENO);
 		dup2(stdout_backup, STDOUT_FILENO);
 		close(stdin_backup);
 		close(stdout_backup);
-		
 		cmnd = cmnd->next;
 	}
 }

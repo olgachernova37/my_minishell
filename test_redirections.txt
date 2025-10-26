@@ -1,0 +1,110 @@
+# Test file with multiple redirections (no pipes)
+# Run these commands in your minishell to test redirection handling
+
+# Test 1: Multiple output redirections (last one wins)
+echo "first" > file1.txt > file2.txt > file3.txt
+# Expected: file3.txt contains "first", file1.txt and file2.txt are empty
+
+# Test 2: Input and output redirection together
+cat < output1.txt > result1.txt
+# Expected: copies content of output1.txt to result1.txt
+
+# Test 3: Multiple input redirections (last one wins)
+cat < file1.txt < file2.txt < file3.txt
+# Expected: reads from file3.txt
+
+# Test 4: Output redirection with append
+echo "line1" > test.txt
+echo "line2" >> test.txt
+echo "line3" >> test.txt
+# Expected: test.txt contains all three lines
+
+# Test 5: Mixed redirections in one command
+cat < output1.txt > copy.txt >> copy.txt
+# Expected: reads from output1.txt, writes to copy.txt (last redirection wins)
+
+# Test 6: Multiple append redirections
+echo "hello" >> log.txt >> log2.txt >> log3.txt
+# Expected: log3.txt gets "hello", others may be empty/created
+
+# Test 7: Heredoc with output redirection
+cat << EOF > heredoc_test.txt
+This is line 1
+This is line 2
+This is line 3
+EOF
+# Expected: heredoc_test.txt contains the three lines
+
+# Test 8: Multiple output redirections with different commands
+ls -l > listing1.txt > listing2.txt
+# Expected: listing2.txt has the output, listing1.txt is empty
+
+# Test 9: Input redirection with multiple outputs
+cat < output1.txt > out1.txt > out2.txt > out3.txt
+# Expected: out3.txt has content from output1.txt
+
+# Test 10: Append and overwrite mixed
+echo "start" > mixed.txt
+echo "append1" >> mixed.txt
+echo "overwrite" > mixed.txt
+echo "append2" >> mixed.txt
+# Expected: mixed.txt contains "overwrite" and "append2"
+
+# Test 11: Multiple heredocs (last one wins)
+cat << EOF1 << EOF2 > multi_heredoc.txt
+First heredoc
+EOF1
+Second heredoc
+EOF2
+# Expected: multi_heredoc.txt contains "Second heredoc"
+
+# Test 12: Redirection with no command arguments
+< output1.txt cat > result2.txt
+# Expected: copies output1.txt to result2.txt
+
+# Test 13: Complex multiple redirections
+echo "test" > a.txt < /dev/null >> b.txt > c.txt
+# Expected: c.txt contains "test"
+
+# Test 14: Multiple appends to same file
+echo "line1" >> same.txt
+echo "line2" >> same.txt
+echo "line3" >> same.txt
+# Expected: same.txt contains all three lines
+
+# Test 15: Output to multiple files in sequence (with && if supported)
+echo "data1" > seq1.txt
+echo "data2" > seq2.txt
+echo "data3" > seq3.txt
+# Expected: three separate files created
+
+# Cleanup commands (run after tests):
+# rm -f file1.txt file2.txt file3.txt result1.txt test.txt copy.txt
+# rm -f log.txt log2.txt log3.txt heredoc_test.txt listing1.txt listing2.txt
+# rm -f out1.txt out2.txt out3.txt mixed.txt multi_heredoc.txt result2.txt
+# rm -f a.txt b.txt c.txt same.txt seq1.txt seq2.txt seq3.txt
+
+# Test multiple output redirections
+echo "hello" > f1.txt > f2.txt > f3.txt
+cat f3.txt  # should show "hello"
+cat f1.txt  # should be empty
+
+# Test input + output
+cat < output1.txt > result.txt
+cat result.txt  # should match output1.txt
+
+# Test append operations
+echo "line1" > test.txt
+echo "line2" >> test.txt
+echo "line3" >> test.txt
+cat test.txt  # should show all 3 lines
+
+# Test heredoc with output
+cat << EOF > heredoc.txt
+test line 1
+test line 2
+EOF
+cat heredoc.txt  # should show the 2 lines
+
+# Cleanup
+rm -f f1.txt f2.txt f3.txt result.txt test.txt heredoc.txt
