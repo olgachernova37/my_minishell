@@ -6,7 +6,7 @@
 /*   By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 16:30:53 by olcherno          #+#    #+#             */
-/*   Updated: 2025/10/23 19:08:21 by olcherno         ###   ########.fr       */
+/*   Updated: 2025/10/27 22:01:20 by olcherno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,13 @@ int	main(int argc, char **argv, char **envp)
 			continue ;
 		}
 		input = dollar_extend(input, &env, g_exit_status);
+		
 		//print_extened_input(input);// "debug"
 		words = tokenize(words, input);
+		
 		// creates linked list of tokenized input
 		list = crt_cmnd_ls(words); // creats linked list of commands
+		
 		// print_cmnd_ls(list); // "debug" prints all stuff
 		what_command(&list, &env, env_array);
 	}

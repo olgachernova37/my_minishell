@@ -6,39 +6,73 @@
 /*   By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/20 17:36:59 by dt                #+#    #+#             */
-/*   Updated: 2025/10/23 16:45:06 by olcherno         ###   ########.fr       */
+/*   Updated: 2025/10/27 22:48:43 by olcherno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-// chage to ft_strdup(tmp->word); for right free(t_input) work ??
-// returns malloced array of one command
 void	do_cmnd_array(t_input *words, t_cmnd *node, int size)
 {
-	t_input	*tmp;
-	char	**res;
-	int		i;
+    t_input	*tmp;
+    char	**res;
+    int		i;
 
-	if (words == NULL)
-		return ;
-	i = 0;
-	tmp = words;
-	res = malloc(sizeof(char *) * (size + 1));
-	if (res == NULL)
-		exit(1);
-	while (tmp != NULL && tmp->type != TOKEN_PIPE)
-	{
-		if (!(tmp->type == TOKEN_RDR_IN || tmp->type == TOKEN_RDR_OUT
-				|| tmp->type == TOKEN_APPND || tmp->type == TOKEN_HERE))
-			res[i++] = tmp->word;
-		else
-			tmp = tmp->next;
-		tmp = tmp->next;
-	}
-	res[i] = NULL;
-	node->argv = res;
+    if (words == NULL)
+        return ;
+    i = 0;
+    tmp = words;
+    res = malloc(sizeof(char *) * (size + 1));
+    if (res == NULL)
+        exit(1);
+    while (tmp != NULL && tmp->type != TOKEN_PIPE)
+    {
+        if (tmp->type == TOKEN_RDR_IN || tmp->type == TOKEN_RDR_OUT
+            || tmp->type == TOKEN_APPND || tmp->type == TOKEN_HERE)
+        {
+            tmp = tmp->next;
+            if (tmp)
+                tmp = tmp->next;
+        }
+        else
+        {
+            res[i++] = tmp->word;
+            tmp = tmp->next;
+        }
+    }
+    res[i] = NULL;
+    node->argv = res;
 }
+
+// chage to ft_strdup(tmp->word); for right free(t_input) work ??
+// returns malloced array of one command
+// void	do_cmnd_array(t_input *words, t_cmnd *node, int size)
+// {
+// 	t_input	*tmp;
+// 	char	**res;
+// 	int		i;
+
+// 	if (words == NULL)
+// 		return ;
+// 	i = 0;
+// 	tmp = words;
+// 	res = malloc(sizeof(char *) * (size + 1));
+// 	if (res == NULL)
+// 		exit(1);
+// 	while (tmp != NULL && tmp->type != TOKEN_PIPE)
+// 	{
+// 		if (!(tmp->type == TOKEN_RDR_IN || tmp->type == TOKEN_RDR_OUT
+// 				|| tmp->type == TOKEN_APPND || tmp->type == TOKEN_HERE))
+// 			res[i++] = tmp->word;
+// 		else
+// 			tmp = tmp->next;
+// 		tmp = tmp->next;
+// 	}
+	
+// 	res[i] = NULL;
+// 	node->argv = res;
+	
+// }
 
 // returns malloced array of one command
 // chage to ft_strdup(tmp->word); for right free(t_input) work

@@ -125,3 +125,29 @@ cd minishell
 git clone https://github.com/LucasKuhn/minishell_tester.git
 cd minishell_tester
 ./tester
+
+
+
+void security_fd(int stdin_backup, int stdout_backup)
+{
+    printf("DEBUG: Restoring stdin from fd %d to fd %d\n", stdin_backup, STDIN_FILENO);
+    printf("DEBUG: Restoring stdout from fd %d to fd %d\n", stdout_backup, STDOUT_FILENO);
+    
+    if (dup2(stdin_backup, STDIN_FILENO) < 0)
+        perror("dup2 stdin restore failed");
+    if (dup2(stdout_backup, STDOUT_FILENO) < 0)
+        perror("dup2 stdout restore failed");
+    
+    close(stdin_backup);
+    close(stdout_backup);
+    printf("DEBUG: File descriptors restored successfully\n");
+}
+
+
+
+In your parsing code, add validation:
+if (!delimiter || !*delimiter)
+{
+    ft_putstr_fd("minishell: syntax error near unexpected token `newline'\n",2);
+    return (error_code);
+}

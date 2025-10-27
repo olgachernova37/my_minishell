@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dt <dt@student.42.fr>                      +#+  +:+       +#+        */
+/*   By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:39:52 by olcherno          #+#    #+#             */
-/*   Updated: 2025/10/07 13:59:36 by dt               ###   ########.fr       */
+/*   Updated: 2025/10/27 20:55:06 by olcherno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,6 @@
 // 	}
 // 	return (i);
 // }
-
-
 
 char	*ft_strncpy(char *dest, char *src, unsigned int n)
 {

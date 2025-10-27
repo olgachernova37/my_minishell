@@ -6,7 +6,7 @@
 #    By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/06 15:18:15 by olcherno          #+#    #+#              #
-#    Updated: 2025/10/23 16:40:36 by olcherno         ###   ########.fr        #
+#    Updated: 2025/10/27 21:32:50 by olcherno         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,11 +25,11 @@ crt_cmnd_ls.c do_env_array.c main.c env_init.c \
 tokenizer.c tokenizer_utils.c tokenizer_utils_2.c\
 utils.c validate_input.c validate_input_2.c what_command.c dollar_ls_utils.c \
 dollar_ls_0.c dollar_ls_1.c signal.c main_utils.c implem_redir.c\
-implem_heredoc.c
+implem_heredoc.c redir_utilits.c free_list.c
 
 SRC_DATA = buildin_commands/cd_command_implementation.c    buildin_commands/exit_command_implementation.c    buildin_commands/pwd_command_implementation.c \
 buildin_commands/echo_command_implementation.c  buildin_commands/export_command_implementation.c  buildin_commands/unset_command_implementation.c \
-buildin_commands/other_commands.c buildin_commands/other_commands3.c\
+buildin_commands/other_commands.c buildin_commands/other_commands3.c buildin_commands/other_commands4.c\
 buildin_commands/other_commands2.c buildin_commands/cd_command_implementation2.c buildin_commands/export_command_implementation2.c  \
 buildin_commands/export_command_implementation3.c buildin_commands/export_command_implementation4.c buildin_commands/export_command_implementation5.c
 

@@ -6,44 +6,11 @@
 /*   By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/23 16:22:18 by dt                #+#    #+#             */
-/*   Updated: 2025/10/23 16:44:43 by olcherno         ###   ########.fr       */
+/*   Updated: 2025/10/27 21:30:45 by olcherno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-void	free_list(t_cmnd *list)
-{
-	t_cmnd	*tmp;
-	t_rdrs	*rdr_tmp;
-	int		i;
-
-	while (list)
-	{
-		tmp = list;
-		list = list->next;
-		i = 0;
-		while (tmp->argv && tmp->argv[i])
-			free(tmp->argv[i++]);
-		free(tmp->argv);
-		i = 0;
-		while (tmp->full_argv && tmp->full_argv[i])
-			free(tmp->full_argv[i++]);
-		free(tmp->full_argv);
-		i = 0;
-		while (tmp->argv_type && tmp->argv_type[i])
-			free(tmp->argv_type[i++]);
-		free(tmp->argv_type);
-		while (tmp->rdrs)
-		{
-			rdr_tmp = tmp->rdrs;
-			tmp->rdrs = tmp->rdrs->next;
-			free(rdr_tmp->filename);
-			free(rdr_tmp);
-		}
-		free(tmp);
-	}
-}
 
 void	print_env(t_env *env)
 {

@@ -6,7 +6,7 @@
 /*   By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 16:31:21 by olcherno          #+#    #+#             */
-/*   Updated: 2025/10/23 20:36:52 by olcherno         ###   ########.fr       */
+/*   Updated: 2025/10/27 23:19:27 by olcherno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -311,17 +311,30 @@ void				exit_with_numeric_error(char *arg);
 
 // Redirections
 // Redirections implementation
-int		handle_input_redir(t_rdrs *rdr);
-int		handle_output_redir(t_rdrs *rdr);
-int		handle_append_redir(t_rdrs *rdr);
-int		handle_heredoc_redir(t_rdrs *rdr);
-int		process_single_redir(t_rdrs *rdr);
-int		implamentation_redir(t_cmnd *cmnd);
+int					handle_input_redir(t_rdrs *rdr);
+int					handle_output_redir(t_rdrs *rdr);
+int					handle_append_redir(t_rdrs *rdr);
+int					handle_heredoc_redir(t_rdrs *rdr);
+int					process_single_redir(t_rdrs *rdr);
+int					implamentation_redir(t_cmnd *cmnd);
 
 // Heredoc implementation
-char	*get_heredoc_filename(void);
-void	heredoc_signal_handler(int sig);
-int		write_heredoc_content(int fd, char *delimiter);
-int		handle_heredoc(char *delimiter);
+char				*get_heredoc_filename(void);
+void				heredoc_signal_handler(int sig);
+int					write_heredoc_content(int fd, char *delimiter);
+int					handle_heredoc(char *delimiter);
+int					execute_child_process(char *path_with_command,
+						char **new_input);
+int					wait_for_child(pid_t pid, char **new_input);
+void				security_fd(int stdin_backup, int stdout_backup);
+void				free_filename(char *filename);
+void				print_heredoc_eof_warning(char *delimiter);
+int					handle_heredoc_exit_conditions(char *line, char *delimiter);
+int					check_delimiter_match(char *line, char *delimiter,
+						size_t delim_len);
+
+//free_list.c
+void	free_redirections(t_rdrs *rdrs);
+void	free_command_arrays(t_cmnd *cmd);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 00:00:00 by olcherno          #+#    #+#             */
-/*   Updated: 2025/10/24 00:00:00 by olcherno         ###   ########.fr       */
+/*   Updated: 2025/10/27 21:33:21 by olcherno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,44 @@ void	heredoc_signal_handler(int sig)
 	}
 }
 
+// int	write_heredoc_content(int fd, char *delimiter)
+// {
+// 	char	*line;
+// 	size_t	delim_len;
+
+// 	delim_len = ft_strlen(delimiter);
+// 	signal(SIGINT, heredoc_signal_handler);
+// 	while (1)
+// 	{
+// 		line = readline("> ");
+// 		if (!line || g_exit_status == 130)
+// 		{
+// 			if (!line && g_exit_status != 130)
+// 			{
+// 				ft_putstr_fd("minishell: warning: here-document delimited by ",
+// 					2);
+// 				ft_putstr_fd("end-of-file (wanted `", 2);
+// 				ft_putstr_fd(delimiter, 2);
+// 				ft_putstr_fd("')\n", 2);
+// 			}
+// 			if (line)
+// 				free(line);
+// 			break ;
+// 		}
+// 		if (ft_strncmp(line, delimiter, delim_len) == 0
+// 			&& ft_strlen(line) == delim_len)
+// 		{
+// 			free(line);
+// 			break ;
+// 		}
+// 		ft_putstr_fd(line, fd);
+// 		ft_putstr_fd("\n", fd);
+// 		free(line);
+// 	}
+// 	signal(SIGINT, handler_sig_int);
+// 	return (0);
+// }
+
 int	write_heredoc_content(int fd, char *delimiter)
 {
 	char	*line;
@@ -48,24 +86,11 @@ int	write_heredoc_content(int fd, char *delimiter)
 		line = readline("> ");
 		if (!line || g_exit_status == 130)
 		{
-			if (!line && g_exit_status != 130)
-			{
-				ft_putstr_fd("minishell: warning: here-document delimited by ",
-						2);
-				ft_putstr_fd("end-of-file (wanted `", 2);
-				ft_putstr_fd(delimiter, 2);
-				ft_putstr_fd("')\n", 2);
-			}
-			if (line)
-				free(line);
-			break ;
+			if (handle_heredoc_exit_conditions(line, delimiter))
+				break ;
 		}
-		if (ft_strncmp(line, delimiter, delim_len) == 0
-			&& ft_strlen(line) == delim_len)
-		{
-			free(line);
+		if (check_delimiter_match(line, delimiter, delim_len))
 			break ;
-		}
 		ft_putstr_fd(line, fd);
 		ft_putstr_fd("\n", fd);
 		free(line);
@@ -94,12 +119,24 @@ int	handle_heredoc(char *delimiter)
 	close(fd);
 	if (g_exit_status == 130)
 	{
-		unlink(filename);
-		free(filename);
+		free_filename(filename);
 		return (-1);
 	}
 	read_fd = open(filename, O_RDONLY);
-	unlink(filename);
-	free(filename);
+	free_filename(filename);
 	return (read_fd);
+}
+
+int	implamentation_redir(t_cmnd *cmnd)
+{
+	t_rdrs	*rdr;
+
+	rdr = cmnd->rdrs;
+	while (rdr)
+	{
+		if (process_single_redir(rdr) != 0)
+			return (1);
+		rdr = rdr->next;
+	}
+	return (0);
 }

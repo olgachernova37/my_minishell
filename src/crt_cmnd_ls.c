@@ -6,7 +6,7 @@
 /*   By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 14:38:44 by dt                #+#    #+#             */
-/*   Updated: 2025/10/23 17:12:06 by olcherno         ###   ########.fr       */
+/*   Updated: 2025/10/27 22:08:51 by olcherno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ t_cmnd	*setup_cmnd_node(t_cmnd *node, t_input *next_cmnd)
 	int		size_argv;
 	int		size;
 
+	
 	size_argv = count_cmnd_len_argv(next_cmnd);
 	size = count_cmnd_len(next_cmnd);
 	do_cmnd_array(next_cmnd, node, size_argv);
@@ -104,6 +105,7 @@ t_cmnd	*crt_cmnd_ls_lgc(int cmnd_qntt, t_cmnd *list, t_cmnd *prev_node,
 		}
 		set_to_zero(cmnd_node);
 		cmnd_node = setup_cmnd_node(cmnd_node, words);
+
 		if (!list)
 		{
 			list = cmnd_node;
