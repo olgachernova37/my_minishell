@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   crt_cmnd_ls.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dtereshc <dtereshc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/04 14:38:44 by dt                #+#    #+#             */
-/*   Updated: 2025/10/27 22:08:51 by olcherno         ###   ########.fr       */
+/*   Created: 2025/09/04 14:38:44 by dtereshc          #+#    #+#             */
+/*   Updated: 2025/11/06 16:45:45 by dtereshc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,63 +24,27 @@ t_input	*move_ptr_cmnd(t_input *next_cmnd)
 	return (NULL);
 }
 
-// void	do_rdrs_lgc(t_rdrs *rdr_node, t_rdrs *prev_node, int i)
-// {
-// 	if(!rdr_node)
-// 		return ;
-// 	rdr_node->redir_type = *(node->argv_type[i]);
-// 	rdr_node->filename = node->full_argv[i + 1];
-// 	rdr_node->next = NULL;
-// 	if (node->rdrs == NULL)
-// 		node->rdrs = rdr_node;
-// 	else
-// 		prev_node->next = rdr_node;
-// 	prev_node = rdr_node;
-// 	i += 2;
-// }
-
-//shorter!
-void	do_rdrs(t_cmnd *node)
+// rdrs fields inicialization
+void	end_do_rdrs(t_cmnd *node, t_rdrs *rdr_node, t_rdrs *prev_node, int i)
 {
-	t_rdrs	*rdr_node;
-	t_rdrs	*prev_node;
-	int		i;
-
-	i = 0;
-	prev_node = NULL;
-	while (node->full_argv[i])
-	{
-		if (*(node->argv_type[i]) >= TOKEN_RDR_IN
-			&& *(node->argv_type[i]) <= TOKEN_HERE)
-		{
-			if (!(node->argv_type[i + 1]))
-				break ;
-			rdr_node = malloc(sizeof(t_rdrs));
-			if (!rdr_node)
-				exit(1);
-			rdr_node->redir_type = *(node->argv_type[i]);
-			rdr_node->filename = node->full_argv[i + 1];
-			rdr_node->next = NULL;
-			if (node->rdrs == NULL)
-				node->rdrs = rdr_node;
-			else
-				prev_node->next = rdr_node;
-			prev_node = rdr_node;
-			i += 2;
-			continue ;
-		}
-		i++;
-	}
+	if (!node)
+		exit(12);
+	rdr_node->redir_type = *(node->argv_type[i]);
+	rdr_node->filename = node->full_argv[i + 1];
+	rdr_node->next = NULL;
+	if (node->rdrs == NULL)
+		node->rdrs = rdr_node;
+	else
+		prev_node->next = rdr_node;
+	prev_node = rdr_node;
 }
 
 // setup of each cmnd node
 t_cmnd	*setup_cmnd_node(t_cmnd *node, t_input *next_cmnd)
 {
-	t_cmnd	*new_node;
 	int		size_argv;
 	int		size;
 
-	
 	size_argv = count_cmnd_len_argv(next_cmnd);
 	size = count_cmnd_len(next_cmnd);
 	do_cmnd_array(next_cmnd, node, size_argv);
@@ -91,21 +55,19 @@ t_cmnd	*setup_cmnd_node(t_cmnd *node, t_input *next_cmnd)
 	return (node);
 }
 
-t_cmnd	*crt_cmnd_ls_lgc(int cmnd_qntt, t_cmnd *list, t_cmnd *prev_node,
+t_cmnd	*crt_cmnd_ls_lgc(int cmnd_qntt, t_cmnd *list,
 		t_input *words)
 {
 	t_cmnd	*cmnd_node;
+	t_cmnd	*prev_node;
 
 	while (cmnd_qntt--)
 	{
 		cmnd_node = malloc(sizeof(t_cmnd));
 		if (cmnd_node == NULL)
-		{
 			exit(1);
-		}
 		set_to_zero(cmnd_node);
 		cmnd_node = setup_cmnd_node(cmnd_node, words);
-
 		if (!list)
 		{
 			list = cmnd_node;
@@ -126,13 +88,12 @@ t_cmnd	*crt_cmnd_ls_lgc(int cmnd_qntt, t_cmnd *list, t_cmnd *prev_node,
 t_cmnd	*crt_cmnd_ls(t_input *words)
 {
 	int		cmnd_qntt;
-	t_cmnd	*prev_node;
 	t_cmnd	*list;
-	
+
 	if (words == NULL)
 		return (NULL);
 	cmnd_qntt = count_cmnds(words);
 	list = NULL;
-	list = crt_cmnd_ls_lgc(cmnd_qntt, list, prev_node, words);
+	list = crt_cmnd_ls_lgc(cmnd_qntt, list, words);
 	return (list);
 }

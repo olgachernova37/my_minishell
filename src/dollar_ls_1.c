@@ -5,26 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/20 17:54:13 by dt                #+#    #+#             */
-/*   Updated: 2025/10/27 20:24:48 by olcherno         ###   ########.fr       */
+/*   Created: 2025/10/20 17:54:13 by dtereshc          #+#    #+#             */
+/*   Updated: 2025/11/06 13:12:26 by olcherno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-static void	free_xtnds(t_xtnd *head)
-{
-	t_xtnd	*tmp;
-
-	while (head)
-	{
-		tmp = head->next;
-		if (head->new)
-			free(head->new);
-		free(head);
-		head = tmp;
-	}
-}
 
 void	dollar_extend_logic(char *input, char *new_input, t_xtnd *xtnds,
 		t_xtnd *head)
@@ -50,12 +36,9 @@ void	dollar_extend_logic(char *input, char *new_input, t_xtnd *xtnds,
 	}
 	new_input[n] = '\0';
 	reset_state_sttc(st);
-	free_xtnds(head);
+	free_xtnds(&head);
 }
 
-// xtnd_node = xtnd_env(input, env); -creates linked list of every vlid $words
-// returns empty node (!xtnd_node->new) == TRUE if $ENV note founded
-//	or filled node with t_xtnd struct info
 t_xtnd	*crt_xtnd_logic(char *input, t_env **env, t_quote_state *st)
 {
 	t_xtnd	*xtnd_node;
@@ -66,7 +49,10 @@ t_xtnd	*crt_xtnd_logic(char *input, t_env **env, t_quote_state *st)
 	if (!xtnd_node->new)
 	{
 		if (*(input) == '?')
+		{
+			free_xtnds(&xtnd_node);
 			xtnd_node = crt_xtnd_ex_status(st);
+		}
 		else
 		{
 			xtnd_node->new = ft_strdup("");
@@ -83,7 +69,6 @@ t_xtnd	*pst_q(char *input)
 {
 	t_xtnd	*node;
 	int		len;
-	int		n;
 
 	len = 0;
 	node = malloc(sizeof(t_xtnd));
@@ -94,42 +79,11 @@ t_xtnd	*pst_q(char *input)
 	node->og_len = len + 3;
 	node->new = crt_nd_new(len, input);
 	node->len_dif = ft_strlen(node->new) - node->og_len;
+	node->next = NULL;
 	return (node);
 }
 
-t_xtnd	*crt_xtnd_ls(char *input, t_env **env, int g_exit_status)
-{
-	t_quote_state	*st;
-	t_xtnd			*head;
-	t_xtnd			*xtnd_node;
-
-	head = NULL;
-	if (!input || !env)
-		return (NULL);
-	while (*input)
-	{
-		st = dtct_inquotes(*input);
-		if (!st)
-			exit(40);
-		if (*input == '$' && *(input + 1) && (st->type == '"' || st->type == 0)
-			&& (is_delimiter(*(input + 1) || !(is_delimiter(*(input + 1))))))
-		{
-			xtnd_node = crt_xtnd_logic(input + 1, env, st);
-			connect_nodes(&head, xtnd_node);
-		}
-		else if (*input == '$' && st->type == 0 && (*(input + 1) == '\''
-				|| *(input + 1) == '"'))
-		{
-			xtnd_node = pst_q(input + 2);
-			connect_nodes(&head, xtnd_node);
-		}
-		input++;
-	}
-	reset_state_sttc(st);
-	return (head);
-}
-
-char	*dollar_extend(char *input, t_env **env, int g_exit_status)
+char	*dollar_extend(char *input, t_env **env)
 {
 	t_xtnd	*xtnds;
 	t_xtnd	*head;
@@ -137,7 +91,7 @@ char	*dollar_extend(char *input, t_env **env, int g_exit_status)
 
 	if (!input || !env)
 		return (NULL);
-	xtnds = crt_xtnd_ls(input, env, g_exit_status);
+	xtnds = crt_xtnd_ls(input, env);
 	if (!xtnds)
 		return (ft_strdup(input));
 	head = xtnds;
@@ -145,7 +99,7 @@ char	*dollar_extend(char *input, t_env **env, int g_exit_status)
 				+ 1));
 	if (!new_input)
 	{
-		free_xtnds(head);
+		free_xtnds(&head);
 		return (ft_strdup(input));
 	}
 	dollar_extend_logic(input, new_input, xtnds, head);

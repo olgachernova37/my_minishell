@@ -6,71 +6,70 @@
 /*   By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 16:30:53 by olcherno          #+#    #+#             */
-/*   Updated: 2025/10/27 22:01:20 by olcherno         ###   ########.fr       */
+/*   Updated: 2025/11/06 13:52:12 by olcherno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int		g_exit_status = 0;
-
-void	free_input(t_input *words)
+int	handle_empty_input(char *input)
 {
-	t_input	*tmp;
-
-	while (words)
+	if (!input)
+		return (1);
+	normalize_input_inplace(input);
+	if (*input)
+		add_history(input);
+	if (*input == '\0' || !validate_input(input))
 	{
-		tmp = words;
-		words = words->next;
-		free(tmp->word);
-		free(tmp);
+		free(input);
+		return (1);
 	}
+	return (0);
 }
 
-int	main(int argc, char **argv, char **envp)
+void	initialize_shell(t_env **env, char ***env_array, char **envp)
 {
-	t_env	*env;
-	t_input	*words;
-	char	*tmp;
-	char	*input;
-	char	**env_array;
-	t_cmnd	*list;
-
-	env = env_init(envp);
-	read_history(".minishell_history");
-	env_array = do_env_array(env, count_env_ls(env));
-	init_signals();
-	while (42)
+	if (!envp)
 	{
-		words = NULL;
-		input = readline("Minishell % ");
-		signal(SIGINT, handler_sig_int);
-		if (input == NULL)
-		{
-			char *exit_argv[2];
-			exit_argv[0] = "exit";
-			exit_argv[1] = NULL;
-			exit_command_implementation(exit_argv, &env, env_array);
-			break;
-		}
-		if (*input)
-			add_history(input);
-		if (*input == '\0' || !validate_input(input))
-		{
-			free(input);
-			continue ;
-		}
-		input = dollar_extend(input, &env, g_exit_status);
-		
-		//print_extened_input(input);// "debug"
-		words = tokenize(words, input);
-		
-		// creates linked list of tokenized input
-		list = crt_cmnd_ls(words); // creats linked list of commands
-		
-		// print_cmnd_ls(list); // "debug" prints all stuff
-		what_command(&list, &env, env_array);
+		write(2, "minishell: init error\n", 22);
+		exit(23);
 	}
-	write_history(".minishell_history");
-	return (0);
+	*env = env_init(envp);
+	if (!*env)
+	{
+		write(2, "minishell: env_init failed\n", 27);
+		exit(24);
+	}
+	read_history(".minishell_history");
+	*env_array = do_env_array(*env, count_env_ls(*env));
+	if (!*env_array)
+	{
+		write(2, "minishell: env_array alloc failed\n", 34);
+		exit(25);
+	}
+	init_signals();
+}
+
+char	*read_line_with_prompt(const char *prompt, int is_tty)
+{
+	char	*line;
+	char	*result;
+	size_t	len;
+	ssize_t	nread;
+
+	if (is_tty)
+		return (readline(prompt));
+	line = NULL;
+	len = 0;
+	nread = getline(&line, &len, stdin);
+	if (nread == -1)
+	{
+		free(line);
+		return (NULL);
+	}
+	if (nread > 0 && line[nread - 1] == '\n')
+		line[nread - 1] = '\0';
+	result = ft_strdup(line);
+	free(line);
+	return (result);
 }

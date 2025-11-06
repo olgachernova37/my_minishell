@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_init.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dtereshc <dtereshc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 18:50:50 by olcherno          #+#    #+#             */
-/*   Updated: 2025/10/23 17:06:14 by olcherno         ###   ########.fr       */
+/*   Updated: 2025/11/02 14:20:57 by dtereshc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ t_env	*env_init(char **envp)
 	t_env	*new_node;
 	t_env	*envp_list;
 	int		i;
-	
+
 	i = 0;
 	envp_list = NULL;
 	while (envp[i])

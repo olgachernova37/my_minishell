@@ -6,13 +6,13 @@
 /*   By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 23:26:59 by olcherno          #+#    #+#             */
-/*   Updated: 2025/10/23 16:44:17 by olcherno         ###   ########.fr       */
+/*   Updated: 2025/11/06 13:09:51 by olcherno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	echo_command_implementation(t_cmnd **cmnd_ls, t_env **env)
+int	echo_command_implementation(t_cmnd **cmnd_ls)
 {
 	int	i;
 	int	y;
@@ -28,12 +28,13 @@ int	echo_command_implementation(t_cmnd **cmnd_ls, t_env **env)
 	}
 	while ((*cmnd_ls)->argv[y] != NULL)
 	{
-		printf("%s", (*cmnd_ls)->argv[y]);
+		write(STDOUT_FILENO, (*cmnd_ls)->argv[y],
+			ft_strlen((*cmnd_ls)->argv[y]));
 		if ((*cmnd_ls)->argv[y + 1])
-			printf(" ");
+			write(STDOUT_FILENO, " ", 1);
 		y++;
 	}
 	if (n_flag == 0)
-		printf("\n");
+		write(STDOUT_FILENO, "\n", 1);
 	return (0);
 }

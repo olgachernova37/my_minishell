@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   other_commands3.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dtereshc <dtereshc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 00:00:00 by olcherno          #+#    #+#             */
-/*   Updated: 2025/10/27 20:27:01 by olcherno         ###   ########.fr       */
+/*   Updated: 2025/11/02 14:24:31 by dtereshc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,13 +66,13 @@ char	*find_command_path(char **input, t_env **env)
 	char	*result;
 	int		i;
 
-	i = 0;
 	path_value = get_path_from_env(env);
 	if (!path_value)
 		return (NULL);
 	splited_path = ft_split(path_value, ':');
 	if (!splited_path)
 		return (NULL);
+	i = 0;
 	while (splited_path[i])
 	{
 		result = try_path(splited_path[i], input[0]);

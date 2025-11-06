@@ -6,12 +6,13 @@
 /*   By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 00:00:00 by olcherno          #+#    #+#             */
-/*   Updated: 2025/10/27 23:11:10 by olcherno         ###   ########.fr       */
+/*   Updated: 2025/11/01 20:27:19 by olcherno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+// for TOKEN_RDR_IN <
 int	handle_input_redir(t_rdrs *rdr)
 {
 	int	fd;
@@ -32,6 +33,7 @@ int	handle_input_redir(t_rdrs *rdr)
 	return (0);
 }
 
+// for TOKEN_RDR_OUT >
 int	handle_output_redir(t_rdrs *rdr)
 {
 	int	fd;
@@ -52,6 +54,7 @@ int	handle_output_redir(t_rdrs *rdr)
 	return (0);
 }
 
+// for TOKEN_APPND >>
 int	handle_append_redir(t_rdrs *rdr)
 {
 	int	fd;
@@ -72,19 +75,12 @@ int	handle_append_redir(t_rdrs *rdr)
 	return (0);
 }
 
-int	handle_heredoc_redir(t_rdrs *rdr)
+// for TOKEN_HERE <<
+int	handle_heredoc_redir(t_rdrs *rdr, int counter)
 {
 	int	fd;
 
-	if (rdr->filename == NULL)
-		printf("%s", rdr->filename);
-	// if(rdr->filename == NULL)
-	//     {
-	//         printf("minishell: syntax error near unexpected token `newline'\n");
-	//         g_exit_status = 2;
-	//         return(1);
-	//     }
-	fd = handle_heredoc(rdr->filename);
+	fd = handle_heredoc(rdr->filename, counter);
 	if (fd < 0)
 		return (1);
 	if (dup2(fd, STDIN_FILENO) < 0)
@@ -97,6 +93,7 @@ int	handle_heredoc_redir(t_rdrs *rdr)
 	return (0);
 }
 
+// return 0 when redir funcs do redirections
 int	process_single_redir(t_rdrs *rdr)
 {
 	if (rdr->redir_type == TOKEN_RDR_IN)
@@ -106,6 +103,6 @@ int	process_single_redir(t_rdrs *rdr)
 	else if (rdr->redir_type == TOKEN_APPND)
 		return (handle_append_redir(rdr));
 	else if (rdr->redir_type == TOKEN_HERE)
-		return (handle_heredoc_redir(rdr));
-	return (0);
+		return (handle_heredoc_redir(rdr, 0));
+	return (1);
 }

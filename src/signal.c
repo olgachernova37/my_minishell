@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/27 20:41:37 by olcherno          #+#    #+#             */
-/*   Updated: 2025/10/27 20:55:19 by olcherno         ###   ########.fr       */
+/*   Created: 2025/10/15 19:07:30 by dtereshc          #+#    #+#             */
+/*   Updated: 2025/11/06 13:11:09 by olcherno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ void	handler_sig_int(int sig)
 {
 	if (sig == SIGINT)
 	{
-		rl_replace_line("", 0);
 		printf("\n");
 		rl_on_new_line();
 		g_exit_status = 130;
@@ -41,7 +40,6 @@ int	exit_func(void)
 
 void	init_signals(void)
 {
-	rl_event_hook = exit_func;
 	signal(SIGINT, handler_sig_int);
 	signal(SIGQUIT, handler_sig_quit);
 }
