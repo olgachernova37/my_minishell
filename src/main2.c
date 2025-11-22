@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dtereshc <dtereshc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 16:30:53 by olcherno          #+#    #+#             */
-/*   Updated: 2025/11/06 16:14:44 by dtereshc         ###   ########.fr       */
+/*   Updated: 2025/11/20 20:33:32 by olcherno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static t_cmnd	*create_command_list(t_input *words, char *input)
 	if (!list)
 	{
 		g_exit_status = 1;
-		write(2, "minishell: crt_cmnd_ls error\n", 31);
+		write(2, "minishell: crt_cmnd_ls error\n", 30);
 		free(input);
 		free_t_input(&words);
 		return (NULL);
@@ -63,13 +63,13 @@ static void	execute_commands(t_pipeline_data *data, t_env **env,
 {
 	t_cleanup	cleanup;
 
-	if (process_all_heredocs_in_pipeline(data->list) == 0)
+	cleanup.env = env;
+	cleanup.env_array = env_array;
+	cleanup.cmnd_ls = &(data->list);
+	cleanup.words = &(data->words);
+	cleanup.raw_input = &(data->input);
+	if (process_all_heredocs_in_pipeline(data->list, &cleanup) == 0)
 	{
-		cleanup.env = env;
-		cleanup.env_array = env_array;
-		cleanup.cmnd_ls = &(data->list);
-		cleanup.words = &(data->words);
-		cleanup.raw_input = &(data->input);
 		what_command(&(data->list), env, &cleanup);
 	}
 	cleanup_all_heredocs(data->list);

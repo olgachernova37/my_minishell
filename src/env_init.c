@@ -23,8 +23,11 @@ void	print_my_env(t_env *env)
 	tmp = env;
 	while (tmp != NULL)
 	{
-		printf("%s=%s", tmp->key, tmp->value);
-		printf("\n");
+		if (tmp->value && tmp->value[0] != '\0')
+		{
+			printf("%s=%s", tmp->key, tmp->value);
+			printf("\n");
+		}
 		tmp = tmp->next;
 	}
 }

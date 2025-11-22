@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: dtereshc <dtereshc@student.42.fr>          +#+  +:+       +#+         #
+#    By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/06 15:18:15 by olcherno          #+#    #+#              #
-#    Updated: 2025/11/06 16:19:51 by dtereshc         ###   ########.fr        #
+#    Updated: 2025/11/20 16:29:41 by olcherno         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ pipe_utils_1.c pipe_utils_2.c cmnd_ls_utils_0.c cmnd_ls_utils_1.c \
 tokenizer.c tokenizer_utils_0.c tokenizer_utils_1.c\
 crt_cmnd_ls.c do_env_array.c main.c env_init.c  crt_cmnd_ls1.c\
 tokenizer_utils_2.c implem_redir3.c validate_input_2.c validate_input_3.c\
-validate_input_4.c free_funcs_0.c free_funcs_1.c pipes1.c pipes3.c free_funcs_2.c main2.c main3.c main4.c\
+validate_input_4.c free_funcs_0.c free_funcs_1.c pipes1.c pipes3.c free_funcs_2.c dollar_ls_11.c main2.c main3.c main4.c implem_heredoc1.c\
 
 SRC_DATA = buildin_commands/cd_command_implementation.c\
 buildin_commands/export_command_implementation2.c\

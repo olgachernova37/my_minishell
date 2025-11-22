@@ -6,7 +6,7 @@
 /*   By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 00:00:00 by olcherno          #+#    #+#             */
-/*   Updated: 2025/11/01 20:27:19 by olcherno         ###   ########.fr       */
+/*   Updated: 2025/11/20 20:33:32 by olcherno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,9 @@ int	handle_append_redir(t_rdrs *rdr)
 	return (0);
 }
 
+// Heredocs are now handled separately in process_heredocs.c
+// This function is no longer used
+/*
 // for TOKEN_HERE <<
 int	handle_heredoc_redir(t_rdrs *rdr, int counter)
 {
@@ -92,6 +95,7 @@ int	handle_heredoc_redir(t_rdrs *rdr, int counter)
 	close(fd);
 	return (0);
 }
+*/
 
 // return 0 when redir funcs do redirections
 int	process_single_redir(t_rdrs *rdr)
@@ -102,7 +106,5 @@ int	process_single_redir(t_rdrs *rdr)
 		return (handle_output_redir(rdr));
 	else if (rdr->redir_type == TOKEN_APPND)
 		return (handle_append_redir(rdr));
-	else if (rdr->redir_type == TOKEN_HERE)
-		return (handle_heredoc_redir(rdr, 0));
 	return (1);
 }

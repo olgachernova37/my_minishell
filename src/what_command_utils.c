@@ -65,7 +65,7 @@ int	which_buildin_command(t_cmnd *cmnd, t_env **my_env,
 	{
 		if (cmnd->argv[1] != NULL)
 		{
-			ft_putstr_fd("bash: env: ", 2);
+			ft_putstr_fd("minibash: env: ", 2);
 			ft_putstr_fd(cmnd->argv[1], 2);
 			ft_putstr_fd(": No such file or directory\n", 2);
 			return (127);

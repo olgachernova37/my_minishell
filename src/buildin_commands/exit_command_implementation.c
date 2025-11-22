@@ -12,10 +12,6 @@
 
 #include "../minishell.h"
 
-// ft_fprintf("exit: %s: numeric argument required\n", arg);
-// Note: This function doesn't free memory because it's called from
-// parse_and_validate_exit_arg which is called from exit_command_implementation
-// The parent function will handle cleanup if needed
 void	exit_with_numeric_error(char *arg, t_cleanup *cleanup)
 {
 	write(2, "exit:  ", 7);

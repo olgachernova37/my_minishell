@@ -14,7 +14,7 @@
 
 static void	print_command_error(char *cmd, char *msg, int error_code)
 {
-	ft_putstr_fd("bash: ", 2);
+	ft_putstr_fd("minibash: ", 2);
 	ft_putstr_fd(cmd, 2);
 	ft_putstr_fd(": ", 2);
 	if (error_code)
@@ -77,7 +77,7 @@ int	handle_path_command(char **input, t_env **env)
 	}
 	else
 	{
-		ft_putstr_fd("bash: ", 2);
+		ft_putstr_fd("minibash: ", 2);
 		ft_putstr_fd(input[0], 2);
 		ft_putstr_fd(": command not found\n", 2);
 		return (127);

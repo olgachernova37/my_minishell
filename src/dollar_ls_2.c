@@ -6,7 +6,7 @@
 /*   By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/20 17:54:13 by dtereshc          #+#    #+#             */
-/*   Updated: 2025/11/06 13:12:52 by olcherno         ###   ########.fr       */
+/*   Updated: 2025/11/20 16:17:32 by olcherno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,10 @@ static t_xtnd	*handle_dollar_expansion(char **input, t_env **env,
 {
 	t_xtnd	*xtnd_node;
 
-	if (**input == '$' && *(*input + 1) && (st->type == '"' || st->type == 0)
-		&& (is_delimiter(*(*input + 1)) || !(is_delimiter(*(*input + 1)))))
+	if (**input == '$' && *(*input + 1) && (st->type == '"' || st->type == 0))
 	{
+		if (st->type == 0 && (*(*input + 1) == '"' || *(*input + 1) == '\''))
+			return (NULL);
 		xtnd_node = crt_xtnd_logic(*input + 1, env, st);
 		return (xtnd_node);
 	}

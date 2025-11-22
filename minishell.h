@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dtereshc <dtereshc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 16:31:21 by olcherno          #+#    #+#             */
-/*   Updated: 2025/11/06 16:16:03 by dtereshc         ###   ########.fr       */
+/*   Updated: 2025/11/20 20:33:32 by olcherno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,12 @@ typedef struct s_cleanup
 	char			**raw_input;
 }					t_cleanup;
 
+typedef struct s_heredoc_ctx
+{
+	t_cleanup		*cleanup;
+	char			*filename;
+}					t_heredoc_ctx;
+
 // free func in process
 typedef struct s_redir_context
 {
@@ -240,6 +246,8 @@ int					env_cmp(const char *key, const char *input);
 void				put_value(char *new_input, t_xtnd *ls, int n);
 
 // dollar_ls_1.c
+int					is_env_name_char(char c);
+int					is_literal_dollar(char *input);
 void				dollar_extend_logic(char *input, char *new_input,
 						t_xtnd *xtnds, t_xtnd *head);
 t_xtnd				*crt_xtnd_logic(char *input, t_env **env,
@@ -404,8 +412,10 @@ int					has_heredocs(t_rdrs *rdr_list);
 char				*get_heredoc_filename(int counter);
 char				*create_base_filename(char *pid_str);
 void				heredoc_signal_handler(int sig);
-int					write_heredoc_content(int fd, char *delimiter);
-int					handle_heredoc(char *delimiter, int counter);
+int					write_heredoc_content(int fd, char *delimiter,
+						char *filename, t_cleanup *cleanup);
+int					handle_heredoc(char *delimiter, int counter,
+						t_cleanup *cleanup);
 
 // From implem_redir2.c
 int					process_one_heredoc(int counter, int *last_heredoc_fd);
@@ -424,7 +434,8 @@ int					handle_heredoc_exit_conditions(char *line, char *delimiter);
 
 void				free_command_arrays(t_cmnd *cmd);
 void				free_redirections(t_rdrs *rdrs);
-int					process_all_heredocs_in_pipeline(t_cmnd *cmnd_list);
+int					process_all_heredocs_in_pipeline(t_cmnd *cmnd_list,
+						t_cleanup *cleanup);
 void				cleanup_all_heredocs(t_cmnd *cmnd_list);
 
 // free_funcs_0.c

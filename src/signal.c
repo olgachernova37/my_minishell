@@ -6,7 +6,7 @@
 /*   By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 19:07:30 by dtereshc          #+#    #+#             */
-/*   Updated: 2025/11/06 13:11:09 by olcherno         ###   ########.fr       */
+/*   Updated: 2025/11/20 20:33:32 by olcherno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,10 @@ void	handler_sig_int(int sig)
 {
 	if (sig == SIGINT)
 	{
-		printf("\n");
-		rl_on_new_line();
 		g_exit_status = 130;
+		write(1, "\n", 1);
+		rl_replace_line("", 0);
+		rl_on_new_line();
 		rl_redisplay();
 	}
 }

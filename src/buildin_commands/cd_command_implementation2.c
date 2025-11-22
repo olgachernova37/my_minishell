@@ -58,11 +58,30 @@ int	previous_dir(t_env *env)
 	return (0);
 }
 
-int	standard_cd(char **input, t_env *env)
+static char	*expand_tilde_path(char *path, t_env *env)
 {
-	char	*path;
+	char	*home;
+	char	*expanded;
 
-	path = input[1];
+	if (path[0] != '~')
+		return (NULL);
+	home = get_env_value(env, "HOME");
+	if (!home)
+	{
+		ft_fprintf(STDERR_FD, "cd: HOME not set\n");
+		return ((char *)-1);
+	}
+	if (path[1] == '\0')
+		expanded = ft_strdup(home);
+	else if (path[1] == '/')
+		expanded = ft_strjoin(home, path + 1);
+	else
+		expanded = ft_strdup(path);
+	return (expanded);
+}
+
+static int	execute_cd(char *path, t_env *env)
+{
 	change_oldpwd(env);
 	if (chdir(path) == -1)
 	{
@@ -71,6 +90,24 @@ int	standard_cd(char **input, t_env *env)
 	}
 	change_pwd(env);
 	return (0);
+}
+
+int	standard_cd(char **input, t_env *env)
+{
+	char	*path;
+	char	*expanded_path;
+	int		result;
+
+	path = input[1];
+	expanded_path = expand_tilde_path(path, env);
+	if (expanded_path == (char *)-1)
+		return (1);
+	if (expanded_path)
+		path = expanded_path;
+	result = execute_cd(path, env);
+	if (expanded_path)
+		free(expanded_path);
+	return (result);
 }
 
 int	cd_command_implementation(char **input, t_env *env)

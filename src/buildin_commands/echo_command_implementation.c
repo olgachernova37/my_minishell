@@ -12,27 +12,41 @@
 
 #include "../minishell.h"
 
+static int	is_n_flag(char *str)
+{
+	int	i;
+
+	if (!str || str[0] != '-' || str[1] != 'n')
+		return (0);
+	i = 1;
+	while (str[i])
+	{
+		if (str[i] != 'n')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 int	echo_command_implementation(t_cmnd **cmnd_ls)
 {
 	int	i;
-	int	y;
 	int	n_flag;
 
 	n_flag = 0;
 	i = 1;
-	y = 1;
-	if ((*cmnd_ls)->argv[i] && ft_strncmp((*cmnd_ls)->argv[1], "-n", 3) == 0)
+	while ((*cmnd_ls)->argv[i] && is_n_flag((*cmnd_ls)->argv[i]))
 	{
 		n_flag = 1;
-		y = 2;
+		i++;
 	}
-	while ((*cmnd_ls)->argv[y] != NULL)
+	while ((*cmnd_ls)->argv[i] != NULL)
 	{
-		write(STDOUT_FILENO, (*cmnd_ls)->argv[y],
-			ft_strlen((*cmnd_ls)->argv[y]));
-		if ((*cmnd_ls)->argv[y + 1])
+		write(STDOUT_FILENO, (*cmnd_ls)->argv[i],
+			ft_strlen((*cmnd_ls)->argv[i]));
+		if ((*cmnd_ls)->argv[i + 1])
 			write(STDOUT_FILENO, " ", 1);
-		y++;
+		i++;
 	}
 	if (n_flag == 0)
 		write(STDOUT_FILENO, "\n", 1);

@@ -6,13 +6,14 @@
 /*   By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/02 00:00:00 by olcherno          #+#    #+#             */
-/*   Updated: 2025/11/02 19:47:05 by olcherno         ###   ########.fr       */
+/*   Updated: 2025/11/20 20:33:32 by olcherno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static int	process_command_heredocs(t_cmnd *cmd, int *global_counter)
+static int	process_command_heredocs(t_cmnd *cmd, int *global_counter,
+		t_cleanup *cleanup)
 {
 	t_rdrs	*rdr;
 	int		result;
@@ -22,7 +23,7 @@ static int	process_command_heredocs(t_cmnd *cmd, int *global_counter)
 	{
 		if (rdr->redir_type == TOKEN_HERE)
 		{
-			result = handle_heredoc(rdr->filename, *global_counter);
+			result = handle_heredoc(rdr->filename, *global_counter, cleanup);
 			if (result == -1)
 				return (-1);
 			(*global_counter)++;
@@ -74,7 +75,7 @@ void	cleanup_all_heredocs(t_cmnd *cmnd_list)
 	cleanup_heredoc_files(total);
 }
 
-int	process_all_heredocs_in_pipeline(t_cmnd *cmnd_list)
+int	process_all_heredocs_in_pipeline(t_cmnd *cmnd_list, t_cleanup *cleanup)
 {
 	t_cmnd	*current;
 	int		counter;
@@ -85,7 +86,7 @@ int	process_all_heredocs_in_pipeline(t_cmnd *cmnd_list)
 	{
 		if (current->rdrs && has_heredocs(current->rdrs))
 		{
-			if (process_command_heredocs(current, &counter) == -1)
+			if (process_command_heredocs(current, &counter, cleanup) == -1)
 			{
 				cleanup_heredoc_files(counter);
 				return (-1);

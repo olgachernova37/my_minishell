@@ -39,7 +39,7 @@ void	what_cmnd_shrt_1(t_cmnd *cmnd, t_env **my_env, t_cleanup *cleanup)
 	{
 		if (cmnd->argv && cmnd->argv[0] && !cmnd->argv[0][0])
 		{
-			ft_putstr_fd("bash: ", 2);
+			ft_putstr_fd("minibash: ", 2);
 			ft_putstr_fd(cmnd->argv[0], 2);
 			ft_putstr_fd(": command not found\n", 2);
 			g_exit_status = 127;
@@ -54,8 +54,7 @@ void	what_cmnd_shrt_1(t_cmnd *cmnd, t_env **my_env, t_cleanup *cleanup)
 		g_exit_status = other_commands_implementation(cmnd->argv, my_env);
 }
 
-void	what_command(t_cmnd **cmnd_ls, t_env **my_env,
-		t_cleanup *cleanup)
+void	what_command(t_cmnd **cmnd_ls, t_env **my_env, t_cleanup *cleanup)
 {
 	t_cmnd	*cmnd;
 	int		stdin_backup;

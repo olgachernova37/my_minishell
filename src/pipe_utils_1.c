@@ -94,7 +94,7 @@ int	execve_child(t_cmnd *cmnd, t_env **my_env, char **array_env)
 	}
 	else
 	{
-		printf("bash: %s: command not found\n", cmnd->argv[0]);
+		printf("minibash: %s: command not found\n", cmnd->argv[0]);
 		return (127);
 	}
 }

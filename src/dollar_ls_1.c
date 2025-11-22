@@ -6,11 +6,32 @@
 /*   By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/20 17:54:13 by dtereshc          #+#    #+#             */
-/*   Updated: 2025/11/06 13:12:26 by olcherno         ###   ########.fr       */
+/*   Updated: 2025/11/20 16:34:18 by olcherno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+int	is_env_name_char(char c)
+{
+	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0'
+			&& c <= '9') || c == '_')
+		return (1);
+	return (0);
+}
+
+int	is_literal_dollar(char *input)
+{
+	if (input == NULL)
+		return (1);
+	if (input[0] == '\0')
+		return (1);
+	if (input[0] == '"' || input[0] == '\'')
+		return (1);
+	if (!is_env_name_char(input[0]) && input[0] != '?')
+		return (1);
+	return (0);
+}
 
 void	dollar_extend_logic(char *input, char *new_input, t_xtnd *xtnds,
 		t_xtnd *head)
@@ -37,32 +58,6 @@ void	dollar_extend_logic(char *input, char *new_input, t_xtnd *xtnds,
 	new_input[n] = '\0';
 	reset_state_sttc(st);
 	free_xtnds(&head);
-}
-
-t_xtnd	*crt_xtnd_logic(char *input, t_env **env, t_quote_state *st)
-{
-	t_xtnd	*xtnd_node;
-
-	xtnd_node = xtnd_env(input, env);
-	if (!xtnd_node)
-		exit(41);
-	if (!xtnd_node->new)
-	{
-		if (*(input) == '?')
-		{
-			free_xtnds(&xtnd_node);
-			xtnd_node = crt_xtnd_ex_status(st);
-		}
-		else
-		{
-			xtnd_node->new = ft_strdup("");
-			xtnd_node->og_len = calc_og(input);
-			if (*(xtnd_node->new) == 0)
-				xtnd_node->len_dif = ft_strlen(xtnd_node->new)
-					- xtnd_node->og_len;
-		}
-	}
-	return (xtnd_node);
 }
 
 t_xtnd	*pst_q(char *input)
