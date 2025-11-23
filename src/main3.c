@@ -6,7 +6,7 @@
 /*   By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 16:30:53 by olcherno          #+#    #+#             */
-/*   Updated: 2025/11/20 20:33:32 by olcherno         ###   ########.fr       */
+/*   Updated: 2025/11/23 16:03:27 by olcherno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ static void	main_loop(t_env **env, char **env_array, int is_tty)
 
 static void	cleanup_and_exit2(t_env **env, char **env_array)
 {
-	write_history(".minishell_history");
 	free_env_array(env_array);
 	free_env(env);
 }

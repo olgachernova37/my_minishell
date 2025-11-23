@@ -1,34 +1,29 @@
-==2494== Memcheck, a memory error detector
-==2494== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
-==2494== Using Valgrind-3.22.0 and LibVEX; rerun with -h for copyright info
-==2494== Command: ./minishell
-==2494== Parent PID: 2377
-==2494== 
-==2527== 
-==2527== HEAP SUMMARY:
-==2527==     in use at exit: 232,788 bytes in 234 blocks
-==2527==   total heap usage: 1,106 allocs, 872 frees, 278,514 bytes allocated
-==2527== 
-==2527== LEAK SUMMARY:
-==2527==    definitely lost: 0 bytes in 0 blocks
-==2527==    indirectly lost: 0 bytes in 0 blocks
-==2527==      possibly lost: 0 bytes in 0 blocks
-==2527==    still reachable: 0 bytes in 0 blocks
-==2527==         suppressed: 232,788 bytes in 234 blocks
-==2527== 
-==2527== For lists of detected and suppressed errors, rerun with: -s
-==2527== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
-==2494== 
-==2494== HEAP SUMMARY:
-==2494==     in use at exit: 232,806 bytes in 234 blocks
-==2494==   total heap usage: 1,114 allocs, 880 frees, 280,295 bytes allocated
-==2494== 
-==2494== LEAK SUMMARY:
-==2494==    definitely lost: 0 bytes in 0 blocks
-==2494==    indirectly lost: 0 bytes in 0 blocks
-==2494==      possibly lost: 0 bytes in 0 blocks
-==2494==    still reachable: 0 bytes in 0 blocks
-==2494==         suppressed: 232,806 bytes in 234 blocks
-==2494== 
-==2494== For lists of detected and suppressed errors, rerun with: -s
-==2494== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==62007== Memcheck, a memory error detector
+==62007== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==62007== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==62007== Command: ./minishell
+==62007== Parent PID: 48194
+==62007== 
+==62007== 
+==62007== HEAP SUMMARY:
+==62007==     in use at exit: 208,181 bytes in 222 blocks
+==62007==   total heap usage: 767 allocs, 545 frees, 241,168 bytes allocated
+==62007== 
+==62007== 4,016 bytes in 1 blocks are still reachable in loss record 41 of 63
+==62007==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==62007==    by 0x48AABAC: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==62007==    by 0x48A3FD6: add_history (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==62007==    by 0x405E71: handle_empty_input (main.c:21)
+==62007==    by 0x40822C: process_input_line (main3.c:31)
+==62007==    by 0x408178: main_loop (main3.c:49)
+==62007==    by 0x4080E7: main (main3.c:71)
+==62007== 
+==62007== LEAK SUMMARY:
+==62007==    definitely lost: 0 bytes in 0 blocks
+==62007==    indirectly lost: 0 bytes in 0 blocks
+==62007==      possibly lost: 0 bytes in 0 blocks
+==62007==    still reachable: 4,016 bytes in 1 blocks
+==62007==         suppressed: 204,165 bytes in 221 blocks
+==62007== 
+==62007== For lists of detected and suppressed errors, rerun with: -s
+==62007== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

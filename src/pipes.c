@@ -6,7 +6,7 @@
 /*   By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 17:51:30 by dtereshc          #+#    #+#             */
-/*   Updated: 2025/11/06 13:37:51 by olcherno         ###   ########.fr       */
+/*   Updated: 2025/11/23 16:27:51 by olcherno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ int	finish_child(t_cmnd **cmnd, int pipes_qntt, pid_t *pids, int i)
 
 	close_ends(cmnd);
 	l_st = find_last_state(pids, i, pipes_qntt);
+	rl_clear_history();
 	free(pids);
 	if (WIFEXITED(l_st))
 		return (WEXITSTATUS(l_st));
@@ -62,6 +63,7 @@ int	creat_child(int pipes_qntt, t_cmnd **cmnd, t_cleanup *cleanup)
 		if (pids[i] == 0)
 		{
 			free(pids);
+			rl_clear_history();
 			child_logic(cmnd, cur_cmnd, cleanup);
 		}
 		cur_cmnd = cur_cmnd->next;

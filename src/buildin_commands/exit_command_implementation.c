@@ -6,7 +6,7 @@
 /*   By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 23:50:50 by olcherno          #+#    #+#             */
-/*   Updated: 2025/11/06 15:08:48 by olcherno         ###   ########.fr       */
+/*   Updated: 2025/11/23 16:03:27 by olcherno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ void	exit_with_numeric_error(char *arg, t_cleanup *cleanup)
 	write(2, arg, ft_strlen(arg));
 	write(2, " : numeric argument required\n", 29);
 	g_exit_status = 2;
-	write_history(".minishell_history");
 	rl_clear_history();
 	if (cleanup->raw_input && *cleanup->raw_input)
 		free(*cleanup->raw_input);
@@ -64,7 +63,6 @@ int	exit_command_implementation(char **input, t_cleanup *cleanup)
 		}
 		g_exit_status = (unsigned char)val;
 	}
-	write_history(".minishell_history");
 	rl_clear_history();
 	if (cleanup->raw_input && *cleanup->raw_input)
 		free(*cleanup->raw_input);

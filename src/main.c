@@ -6,7 +6,7 @@
 /*   By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 16:30:53 by olcherno          #+#    #+#             */
-/*   Updated: 2025/11/20 18:26:44 by olcherno         ###   ########.fr       */
+/*   Updated: 2025/11/23 16:33:26 by olcherno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ void	initialize_shell(t_env **env, char ***env_array, char **envp)
 		write(2, "minishell: env_init failed\n", 27);
 		exit(24);
 	}
-	read_history(".minishell_history");
 	*env_array = do_env_array(*env, count_env_ls(*env));
 	if (!*env_array)
 	{

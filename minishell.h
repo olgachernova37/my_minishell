@@ -6,7 +6,7 @@
 /*   By: olcherno <olcherno@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 16:31:21 by olcherno          #+#    #+#             */
-/*   Updated: 2025/11/20 20:33:32 by olcherno         ###   ########.fr       */
+/*   Updated: 2025/11/23 15:50:28 by olcherno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -303,6 +303,9 @@ void				update_env_value(t_env *env, const char *key,
 						const char *new_value);
 int					change_to_oldpwd(char *path, char *prev_dir, char *cwd);
 int					previous_dir(t_env *env);
+char				*expand_tilde_path(char *path, t_env *env);
+int					execute_cd(char *path, t_env *env);
+int					standard_cd(char **input, t_env *env);
 
 // export_command_implementation.c functions
 int					get_array_size(char **array);
@@ -416,6 +419,18 @@ int					write_heredoc_content(int fd, char *delimiter,
 						char *filename, t_cleanup *cleanup);
 int					handle_heredoc(char *delimiter, int counter,
 						t_cleanup *cleanup);
+int					process_heredoc_line(int fd, char *delimiter, char *line);
+t_heredoc_ctx		*get_heredoc_ctx(t_cleanup *cleanup, char *filename);
+void				do_heredoc_cleanup(void);
+void				heredoc_sigint_handler(int sig);
+void				cleanup_child_and_exit(int exit_code);
+void				setup_heredoc_child_signals(void);
+void				heredoc_child_loop(int fd, char *delimiter,
+						t_cleanup *cleanup, char *filename);
+int					handle_heredoc_sigint(int sig);
+int					handle_child_signaled(int status);
+int					handle_child_exited(int status);
+int					wait_for_heredoc_child(pid_t pid);
 
 // From implem_redir2.c
 int					process_one_heredoc(int counter, int *last_heredoc_fd);
